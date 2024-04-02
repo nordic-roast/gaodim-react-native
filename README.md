@@ -16,10 +16,8 @@ GaoDim is a React Native application built using the Expo framework. It is desig
 
 Before you begin, ensure you have met the following requirements:
 
-- Node.js (LTS version)
-- npm  
-- Expo Go mobile app for iOS or Android for testing
-- An IDE 
+- Node.js (LTS version) 
+- Expo Go mobile app for iOS or Android for testing 
 
 ### Installation
 
