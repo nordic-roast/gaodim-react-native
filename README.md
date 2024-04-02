@@ -36,10 +36,6 @@ Install the dependencies
 npm install
 ```
 
-```bash
-npm install
-```
-
 ### Running the Application
 To start the Expo development server:
 
