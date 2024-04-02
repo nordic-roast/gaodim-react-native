@@ -42,6 +42,9 @@ npm install react-native-screens react-native-safe-area-context
 # Install the Expo Camera library
 npm install expo-camera
 
+# Install the Expo runtime for Web
+npx expo install react-native-web react-dom @expo/metro-runtime
+
 # Installing the rest of dependencies
 npm install
 ```
