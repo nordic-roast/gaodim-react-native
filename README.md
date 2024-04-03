@@ -47,9 +47,7 @@ npx expo start
 
 
 
-### Testing
-Explain how to run the automated tests for this system (if applicable).
-
+### Testing 
 Building
 To create a production build of the app, run:
 ```bash
