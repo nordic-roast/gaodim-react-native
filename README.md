@@ -31,20 +31,11 @@ cd gaodim-react-native
 Install the dependencies
 
 ```bash
-# React Navigation libraries
-npm install @react-navigation/native @react-navigation/bottom-tabs
-
-# Necessary peer dependencies for React Navigation
-npm install react-native-screens react-native-safe-area-context
-
-# Install the Expo Camera library
-npm install expo-camera
-
-# Install the Expo runtime for Web
-npx expo install react-native-web react-dom @expo/metro-runtime
-
 # Installing the rest of dependencies
 npm install
+
+# Install the Expo runtime for Web
+npx expo install @expo/metro-runtime
 ```
 
 ### Running the Application
