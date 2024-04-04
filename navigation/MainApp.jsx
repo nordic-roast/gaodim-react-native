@@ -1,5 +1,5 @@
 // MainApp.jsx
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import SplashScreen from "../views/SplashScreen";
@@ -8,10 +8,6 @@ import RegisterScreen from "../views/RegisterScreen";
 import HomeScreen from "../views/HomeScreen"; // Your actual HomeScreen component
 import CameraScreen from "../views/CameraScreen"; // Your actual CameraScreen component
 import HistoryScreen from "../views/HistoryScreen"; // Your actual HistoryScreen component
-
-import { onAuthStateChanged } from "firebase/auth";
-
-import { auth } from "../firebaseConfig";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -29,20 +25,6 @@ const BottomTabNavigator = () => {
 
 // Main App Component
 const MainApp = () => {
-  const [loggedInUser, setLoggedInUser] = useState(null);
-
-  useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        setLoggedInUser(user);
-      } else {
-      }
-    });
-  }, []);
-
-  console.log(loggedInUser);
-  console.log(loggedInUser === null);
-
   return (
     <Stack.Navigator initialRouteName="Splash">
       <Stack.Screen
@@ -50,19 +32,6 @@ const MainApp = () => {
         component={SplashScreen}
         options={{ headerShown: false }}
       />
-      {loggedInUser === null ? (
-        <Stack.Screen
-          name="Splash2"
-          component={SplashScreen}
-          options={{ headerShown: false }}
-        />
-      ) : (
-        <Stack.Screen
-          name="Home2"
-          component={HomeScreen}
-          options={{ headerShown: false }}
-        />
-      )}
       <Stack.Screen
         name="Login"
         component={LoginScreen}
