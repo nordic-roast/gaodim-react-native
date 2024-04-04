@@ -1,15 +1,20 @@
 // RegisterScreen.js
-import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet, Button } from 'react-native';
+import React, { useEffect, useState } from "react";
+import { View, Text, TextInput, StyleSheet, Button } from "react-native";
+
+import { auth } from "../firebaseConfig";
+
+import { signInWithEmailAndPassword } from "firebase/auth";
 
 const LoginScreen = ({ navigation }) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
   const handleLogin = () => {
-    // Implement registration functionality
-    console.log('Login with:', email, password, confirmPassword);
+    signInWithEmailAndPassword(auth, email, password).then(() => {
+      navigation.navigate("Home");
+    });
   };
 
   return (
@@ -28,15 +33,13 @@ const LoginScreen = ({ navigation }) => {
         secureTextEntry
         style={styles.input}
       />
-      <TextInput
-        placeholder="Confirm password"
-        value={confirmPassword}
-        onChangeText={setConfirmPassword}
-        secureTextEntry
-        style={styles.input}
-      />
-      <Button title="Login" onPress={handleLogin} /> 
-      <Text onPress={() => navigation.navigate('Register')}>Don't have an account? Register</Text>
+      <Button title="Login" onPress={handleLogin} />
+      <Text
+        style={{ color: "white" }}
+        onPress={() => navigation.navigate("Register")}
+      >
+        Don't have an account? Register
+      </Text>
     </View>
   );
 };
@@ -44,16 +47,16 @@ const LoginScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     padding: 20,
-    backgroundColor: '#000', // Assuming black background from your screenshot
+    backgroundColor: "#000", // Assuming black background from your screenshot
   },
   input: {
-    width: '100%',
+    width: "100%",
     padding: 10,
     marginBottom: 8,
-    backgroundColor: '#FFF',
+    backgroundColor: "#FFF",
   },
 });
 

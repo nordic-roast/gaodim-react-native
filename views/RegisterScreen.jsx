@@ -1,15 +1,20 @@
 // RegisterScreen.js
-import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet, Button } from 'react-native';
+import React, { useState } from "react";
+import { View, Text, TextInput, StyleSheet, Button } from "react-native";
+
+import { auth } from "../firebaseConfig";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 
 const RegisterScreen = ({ navigation }) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
   const handleRegister = () => {
-    // Implement registration functionality
-    console.log('Register with:', email, password, confirmPassword);
+    createUserWithEmailAndPassword(auth, email, password).then(() => {
+      "Signed up successfully!";
+      navigation.navigate("Login");
+    });
   };
 
   return (
@@ -36,8 +41,10 @@ const RegisterScreen = ({ navigation }) => {
         style={styles.input}
       />
       <Button title="Register" onPress={handleRegister} />
-      <Button title="Login" onPress={() => navigation.navigate('Login')} />
-      <Text onPress={() => navigation.navigate('Login')}>Remember password? Login</Text>
+      <Button title="Login" onPress={() => navigation.navigate("Login")} />
+      <Text onPress={() => navigation.navigate("Login")}>
+        Remember password? Login
+      </Text>
     </View>
   );
 };
@@ -45,16 +52,16 @@ const RegisterScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     padding: 20,
-    backgroundColor: '#000', // Assuming black background from your screenshot
+    backgroundColor: "#000", // Assuming black background from your screenshot
   },
   input: {
-    width: '100%',
+    width: "100%",
     padding: 10,
     marginBottom: 8,
-    backgroundColor: '#FFF',
+    backgroundColor: "#FFF",
   },
 });
 
