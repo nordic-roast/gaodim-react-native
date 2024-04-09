@@ -33,6 +33,11 @@ const MainApp = () => {
         options={{ headerShown: false }}
       />
       <Stack.Screen
+        name="Camera"
+        component={CameraScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
         name="Login"
         component={LoginScreen}
         options={{ headerShown: false }}
