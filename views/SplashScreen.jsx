@@ -30,7 +30,7 @@ const SplashScreen = ({ navigation }) => {
       />
       <Button
         title="Continue as a guest"
-        onPress={() => navigation.navigate("Home")}
+        onPress={() => navigation.navigate("Main")}
       />
     </View>
   );
@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#000", // Assuming black background from your screenshot
+    backgroundColor: "#000",  
   },
   title: {
     fontSize: 24,

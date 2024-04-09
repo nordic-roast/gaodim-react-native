@@ -2,12 +2,12 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import SplashScreen from "../views/SplashScreen";
-import LoginScreen from "../views/LoginScreen";
-import RegisterScreen from "../views/RegisterScreen";
-import HomeScreen from "../views/HomeScreen"; // Your actual HomeScreen component
-import CameraScreen from "../views/CameraScreen"; // Your actual CameraScreen component
-import HistoryScreen from "../views/HistoryScreen"; // Your actual HistoryScreen component
+import SplashScreen from "../views/Splash";
+import LoginScreen from "../views/Login";
+import RegisterScreen from "../views/Register";
+import HomeScreen from "../views/HomeScreen";  
+import CameraScreen from "../views/CameraScreen";  
+import HistoryScreen from "../views/HistoryScreen";  
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -51,7 +51,7 @@ const MainApp = () => {
       <Stack.Screen
         name="Main"
         component={BottomTabNavigator}
-        options={{ headerShown: false }} // You can set this to true if you want a header
+        options={{ headerShown: false }} 
       />
     </Stack.Navigator>
   );

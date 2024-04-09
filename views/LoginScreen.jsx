@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     padding: 20,
-    backgroundColor: "#000", // Assuming black background from your screenshot
+    backgroundColor: "#000",  
   },
   input: {
     width: "100%",
