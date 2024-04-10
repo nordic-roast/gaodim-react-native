@@ -5,9 +5,9 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import SplashScreen from "../views/SplashScreen";
 import LoginScreen from "../views/LoginScreen";
 import RegisterScreen from "../views/RegisterScreen";
-import HomeScreen from "../views/HomeScreen";  
-import CameraScreen from "../views/CameraScreen";  
-import HistoryScreen from "../views/HistoryScreen";  
+import HomeScreen from "../views/HomeScreen";
+import CameraScreen from "../views/CameraScreen";
+import HistoryScreen from "../views/HistoryScreen";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -56,7 +56,7 @@ const MainApp = () => {
       <Stack.Screen
         name="Main"
         component={BottomTabNavigator}
-        options={{ headerShown: false }} 
+        options={{ headerShown: false }}
       />
     </Stack.Navigator>
   );
