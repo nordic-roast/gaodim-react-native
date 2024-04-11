@@ -27,14 +27,17 @@ async function OCRImage(url) {
     redirect: "follow",
   };
 
+
+
   const response = await fetch(
-    "https://vision.googleapis.com/v1/images:annotate?key=AIzaSyDafWOUasqWIecxuVQ0B3GY4jaZjwG2JGY",
+    "https://vision.googleapis.com/v1/images:annotate?key=${apikey}",
     requestOptions
   )
     .then((response) => response.text())
     .then((result) => {
       console.log("OCR successful!");
       let obj = JSON.parse(result);
+      console.log(result)
       return obj["responses"][0]["fullTextAnnotation"]["text"].toString();
     })
     .catch((error) => console.error(error));

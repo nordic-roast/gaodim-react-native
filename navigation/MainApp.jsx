@@ -8,9 +8,11 @@ import RegisterScreen from "../views/RegisterScreen";
 import HomeScreen from "../views/HomeScreen";
 import CameraScreen from "../views/CameraScreen";
 import HistoryScreen from "../views/HistoryScreen";
+import AppealScreen from "../views/AppealScreen";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
+
 
 // Component to hold the bottom tabs
 const BottomTabNavigator = () => {
@@ -26,7 +28,7 @@ const BottomTabNavigator = () => {
 // Main App Component
 const MainApp = () => {
   return (
-    <Stack.Navigator initialRouteName="Splash">
+    <Stack.Navigator initialRouteName="Camera">
       <Stack.Screen
         name="Splash"
         component={SplashScreen}
@@ -50,6 +52,11 @@ const MainApp = () => {
       <Stack.Screen
         name="Home"
         component={HomeScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Appeal"
+        component={AppealScreen}
         options={{ headerShown: false }}
       />
       {/* The main tab navigator becomes a screen in the stack navigator */}

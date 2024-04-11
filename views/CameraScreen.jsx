@@ -1,19 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { View, Button } from "react-native";
 import { Camera } from "expo-camera";
+import 'react-native-get-random-values';
 import { v4 as uuidv4 } from "uuid";
-
 import { push, ref as databaseRef, set } from "firebase/database";
-
 import {
   ref as storageRef,
   uploadBytes,
   getDownloadURL,
 } from "firebase/storage";
-
 import { database, storage } from "../firebaseConfig";
-
 import OCRImage from "../vision";
+import { useNavigation } from "@react-navigation/native";
 
 const DB_TICKETS_KEY = "tickets";
 const STORAGE_KEY = "images/";
@@ -50,6 +48,7 @@ export default function CameraScreen() {
   const [hasPermission, setHasPermission] = useState(null);
   const [type, setType] = useState(Camera.Constants.Type.back);
   const [camera, setCamera] = useState(null);
+  const navigation = useNavigation();
 
   useEffect(() => {
     (async () => {
@@ -61,7 +60,10 @@ export default function CameraScreen() {
   async function takePicture() {
     if (camera) {
       const data = await camera.takePictureAsync();
-      uploadImage(data.uri);
+      const imageURL = await uploadImage(data.uri);
+      return imageURL;
+      // Navigate to the AppealScreen with the imageURL as a parameter
+      navigation.navigate("AppealScreen", { imageURL:url });
     }
   }
 
@@ -75,12 +77,15 @@ export default function CameraScreen() {
   return (
     <View style={{ flex: 1 }}>
       <Camera style={{ flex: 1 }} type={type} ref={(ref) => setCamera(ref)}>
-        {/* Rest of your camera UI here */}
+        {/* Rest of your camera UI here */}</Camera>
         <Button
-          title="Take picture and send to VisionAPI"
-          onPress={() => takePicture()}
-        />
-      </Camera>
+      title="Take picture of your ticket"
+      onPress={async () => {
+        const imageURL = await takePicture();
+        navigation.navigate("Appeal", { imageURL });
+      }}
+    />
+      
       <Button
         title="Flip Camera"
         onPress={() => {

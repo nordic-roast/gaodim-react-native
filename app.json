@@ -11,6 +11,9 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
+    "extra": {
+      "GOOGLE_VISION_API_KEY": "YOUR_API_KEY"
+    },
     "assetBundlePatterns": [
       "**/*"
     ],
