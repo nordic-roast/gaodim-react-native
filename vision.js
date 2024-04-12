@@ -1,4 +1,5 @@
 async function OCRImage(url) {
+  // console.log("url43 >>>>", url);
   const myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/json");
 
@@ -27,9 +28,7 @@ async function OCRImage(url) {
     redirect: "follow",
   };
 
-
-
-  const response = await fetch(
+  return fetch(
     "https://vision.googleapis.com/v1/images:annotate?key=${apikey}",
     requestOptions
   )
@@ -37,11 +36,11 @@ async function OCRImage(url) {
     .then((result) => {
       console.log("OCR successful!");
       let obj = JSON.parse(result);
-      console.log(result)
-      return obj["responses"][0]["fullTextAnnotation"]["text"].toString();
+      console.log(">>>>>>>>>>>123123123>>>>>>", result);
+      return obj?.["responses"]?.[0]?.["fullTextAnnotation"]?.[
+        "text"
+      ]?.toString();
     })
-    .catch((error) => console.error(error));
-
-  return response;
+    .catch((error) => console.error("vision >>> rror >>>>", error));
 }
 export default OCRImage;

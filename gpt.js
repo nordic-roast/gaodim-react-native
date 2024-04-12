@@ -3,7 +3,9 @@ import OpenAI from "openai";
 // Function to generate GPT prompt
 export function generateGPTPrompt(reason, visionApiResponse) {
   const prompt = `
-  You have received a parking violation notice, and the extracted content from the ticket includes: ${visionApiResponse}.
+  You have received a parking violation notice, and the extracted content from the ticket includes: ${JSON.stringify(
+    visionApiResponse
+  )}.
   To effectively appeal this notice, it's essential to understand the context of the ticket and combine it with your reason to craft a compelling appeal letter.
   Please provide additional context or information (Reason: ${reason}) that could assist in appealing this notice.
     `;
@@ -11,10 +13,8 @@ export function generateGPTPrompt(reason, visionApiResponse) {
   return prompt.trim();
 }
 
-//APIkey
-
 // Function to send request to GPT API
-export async function callGPTAPI(prompt, API_KEY) {
+export async function callGPTAPI(prompt) {
   const options = {
     method: "POST",
     headers: {
@@ -25,7 +25,7 @@ export async function callGPTAPI(prompt, API_KEY) {
       model: "gpt-3.5-turbo",
       messages: [{ role: "user", content: prompt }],
     }),
-    timeout: 5000
+    timeout: 5000,
   };
   console.log("API Request Options:", options);
 
@@ -40,12 +40,15 @@ export async function callGPTAPI(prompt, API_KEY) {
     console.log("API Response Data:", data);
 
     if (data.choices && data.choices.length > 0) {
-      return data.choices[0].message.content.trim();
+      return data?.choices?.[0]?.message?.content?.trim();
     } else {
       throw new Error("Failed to get a response from OpenAI.");
     }
   } catch (error) {
-    console.error("An error occurred while fetching the GPT-3 response:", error);
+    console.error(
+      "An error occurred while fetching the GPT-3 response:",
+      error
+    );
     throw new Error("An error occurred while fetching the GPT-3 response.");
   }
 }
