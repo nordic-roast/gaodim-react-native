@@ -1,7 +1,15 @@
 import OpenAI from "openai";
 
 // Function to generate GPT prompt
-export function generateGPTPrompt(reason, visionApiResponse) {
+export function generateGPTPrompt(
+  reason,
+  visionApiResponse,
+  firstName,
+  lastName
+) {
+  const nameContext =
+    firstName != "" || lastName != "" ? `${firstName} ${lastName}` : "";
+
   const prompt = `
   You have received a parking violation notice, and the extracted content from the ticket includes: ${JSON.stringify(
     visionApiResponse
@@ -10,6 +18,8 @@ export function generateGPTPrompt(reason, visionApiResponse) {
   Here is some additional context or information (Reason: ${reason}) that could assist in appealing this notice.
 
   Generate a response in the format of a formal appeal letter, with salutations and sign-offs.
+
+  ${nameContext != "" ? `Your name is ${nameContext}.` : ""}
     `;
 
   return prompt.trim();
