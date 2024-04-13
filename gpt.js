@@ -7,11 +7,17 @@ export function generateGPTPrompt(reason, visionApiResponse) {
     visionApiResponse
   )}.
   To effectively appeal this notice, it's essential to understand the context of the ticket and combine it with your reason to craft a compelling appeal letter.
-  Please provide additional context or information (Reason: ${reason}) that could assist in appealing this notice.
+  Here is some additional context or information (Reason: ${reason}) that could assist in appealing this notice.
+
+  Generate a response in the format of a formal appeal letter, with salutations and sign-offs.
     `;
 
   return prompt.trim();
 }
+
+// API key
+
+const API_KEY = process.env.EXPO_PUBLIC_CHATGPT_APIKEY;
 
 // Function to send request to GPT API
 export async function callGPTAPI(prompt) {
