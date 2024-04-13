@@ -40,7 +40,7 @@ const SplashScreen = ({ navigation }) => {
         <Text style={styles.buttonText}>Register</Text>
       </TouchableOpacity>
       <TouchableOpacity
-        onPress={() => navigation.navigate('Home')}
+        onPress={() => navigation.navigate('Main')}
       >
         <Text style={styles.guestText}> 
               Continue as a guest

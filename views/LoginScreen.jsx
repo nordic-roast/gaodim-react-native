@@ -20,7 +20,7 @@ const LoginScreen = ({ navigation }) => {
 
   const handleLogin = () => {
     signInWithEmailAndPassword(auth, email, password).then(() => {
-      navigation.navigate("Home");
+      navigation.navigate("Main");
     });
   };
  
