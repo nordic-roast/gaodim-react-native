@@ -28,8 +28,10 @@ async function OCRImage(url) {
     redirect: "follow",
   };
 
+  const API_KEY = EXPO_PUBLIC_VISION_APIKEY;
+
   return fetch(
-    "https://vision.googleapis.com/v1/images:annotate?key=${apikey}",
+    `https://vision.googleapis.com/v1/images:annotate?key=${API_KEY}`,
     requestOptions
   )
     .then((response) => response.text())
