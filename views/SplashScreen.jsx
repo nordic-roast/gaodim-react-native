@@ -1,12 +1,13 @@
 // SplashScreen.js
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, Button } from "react-native";
+import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
 
 import { onAuthStateChanged } from "firebase/auth";
 
 import { auth } from "../firebaseConfig";
 
 const SplashScreen = ({ navigation }) => {
+
   const [loggedInUser, setLoggedInUser] = useState(null);
 
   useEffect(() => {
@@ -21,38 +22,86 @@ const SplashScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
+      <View style={styles.logoContainer}>
+        <Image source={require('../assets/image.png')} style={styles.logo} />
+      </View>
       <Text style={styles.title}>GAODIM</Text>
       <Text style={styles.subtitle}>Fix your parking woes swiftly</Text>
-      <Button title="Login" onPress={() => navigation.navigate("Login")} />
-      <Button
-        title="Register"
-        onPress={() => navigation.navigate("Register")}
-      />
-      <Button
-        title="Continue as a guest"
-        onPress={() => navigation.navigate("Main")}
-      />
-    </View>
+      <TouchableOpacity
+        onPress={() => navigation.navigate('Login')}
+        style={[styles.button, styles.loginButton]}
+      >
+        <Text style={styles.buttonText}>Login</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => navigation.navigate('Register')}
+        style={[styles.button, styles.registerButton]}
+      >
+        <Text style={styles.buttonText}>Register</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => navigation.navigate('Home')}
+      >
+        <Text style={styles.guestText}> 
+              Continue as a guest
+        </Text>
+    </TouchableOpacity>
+    </View >
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "#000",
+    backgroundColor: '#191A1F',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 20,
+  },
+  logoContainer: {
+    width: '341px',
+    height: '341px',
+  },
+  logo: {
+    width: '100%',
+    height: '100%',
+    resizeMode: 'contain',
   },
   title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    color: "#FFF",
+    fontSize: 32,
+    fontWeight: 'bold',
+    color: '#FFF',
     marginBottom: 8,
   },
   subtitle: {
     fontSize: 16,
-    color: "#FFF",
+    color: '#FFF',
     marginBottom: 24,
+  },
+  button: {
+    width: '100%',
+    padding: 15,
+    marginVertical: 5,
+    borderRadius: 5,
+    alignItems: 'center',
+  },
+  loginButton: {
+    backgroundColor: '#1E232C',
+    color: '#ffffff',
+  },
+  registerButton: {
+    backgroundColor: 'transparent',
+    borderWidth: 1,
+    borderColor: '#FFF',
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 18,
+  },
+  guestText: {
+    color: '#35C2C1',
+    fontSize: 18,
+    marginTop: 15,
   },
 });
 

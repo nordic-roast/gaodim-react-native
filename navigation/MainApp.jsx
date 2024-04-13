@@ -28,7 +28,7 @@ const BottomTabNavigator = () => {
 // Main App Component
 const MainApp = () => {
   return (
-    <Stack.Navigator initialRouteName="Camera">
+    <Stack.Navigator initialRouteName="SplashScreen">
       <Stack.Screen
         name="Splash"
         component={SplashScreen}
