@@ -1,16 +1,17 @@
 import React, { useEffect, useState, useRef } from "react";
-import {
-  View,
-  Text,
-  TextInput,
-  StyleSheet,
-  Button,
-  TouchableOpacity,
-} from "react-native";
+import { View, Text, TextInput, StyleSheet, Button } from "react-native";
 import Clipboard from "@react-native-clipboard/clipboard";
 import { generateGPTPrompt, callGPTAPI } from "../gpt";
 import OCRImage from "../vision";
 import { useRoute } from "@react-navigation/native";
+
+import { firestore } from "../firebaseConfig";
+import { doc, setDoc } from "@firebase/firestore";
+import { uuidv4 } from "@firebase/util";
+import { onAuthStateChanged } from "@firebase/auth";
+import { auth } from "../firebaseConfig";
+
+// Creating ticket once chatGPT response is produced
 
 function removeBase64Prefix(base64String) {
   const commaIndex = base64String.indexOf(",");
@@ -19,8 +20,33 @@ function removeBase64Prefix(base64String) {
 
 export default function AppealScreen({ navigation }) {
   const [reason, setReason] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [gptResponse, setGptResponse] = useState("");
+  const [userId, setUserId] = useState("");
   const route = useRoute();
+
+  async function createTicket(url, navigation, reason, gptGeneratedContent) {
+    const ticketRef = doc(firestore, userId, uuidv4());
+    const newDate = new Date();
+    try {
+      await setDoc(ticketRef, {
+        date: newDate.toString(),
+        url: url ? url : "sampleurl",
+        reason: reason,
+        letter: gptGeneratedContent,
+      });
+      console.log("ticket write success");
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      setUserId(user.uid);
+    });
+  }, []);
 
   const { imageURL } = route.params || {}; // Extract imageURL from navigation parameters
   const visionApiResponse = "";
@@ -28,8 +54,14 @@ export default function AppealScreen({ navigation }) {
   async function handleReasonSubmit() {
     try {
       const visionApiResponse = await OCRImage(imageURL);
-      const gptPrompt = generateGPTPrompt(reason, visionApiResponse);
+      const gptPrompt = generateGPTPrompt(
+        reason,
+        visionApiResponse,
+        firstName,
+        lastName
+      );
       const gptGeneratedContent = await callGPTAPI(gptPrompt);
+      await createTicket(imageURL, navigation, reason, gptGeneratedContent);
       setGptResponse(gptGeneratedContent);
     } catch (error) {
       console.error(error);
@@ -37,14 +69,17 @@ export default function AppealScreen({ navigation }) {
     }
   }
 
-  // Function to handle reason input change
   const handleReasonChange = (text) => {
     setReason(text);
   };
+  const handleFirstNameChange = (text) => {
+    setFirstName(text);
+  };
+  const handleLastNameChange = (text) => {
+    setLastName(text);
+  };
 
-  //assign response from Vision.js
-
-  // clipboard
+  // Clipboard handling
 
   const copyToClipboard = () => {
     Clipboard.setString(gptResponse);
@@ -60,6 +95,18 @@ export default function AppealScreen({ navigation }) {
           onChangeText={handleReasonChange}
           value={reason}
           placeholder="Enter reason"
+        />
+        <TextInput
+          style={styles.input}
+          onChangeText={handleFirstNameChange}
+          value={firstName}
+          placeholder="First name (optional)"
+        />
+        <TextInput
+          style={styles.input}
+          onChangeText={handleLastNameChange}
+          value={lastName}
+          placeholder="Last name (optional)"
         />
       </View>
       <Button
@@ -102,5 +149,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     paddingHorizontal: 10,
     width: "100%",
+    marginBottom: "5%",
   },
 });
