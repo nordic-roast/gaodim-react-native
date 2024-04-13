@@ -13,7 +13,6 @@ import AppealScreen from "../views/AppealScreen";
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
-
 // Component to hold the bottom tabs
 const BottomTabNavigator = () => {
   return (
@@ -28,7 +27,7 @@ const BottomTabNavigator = () => {
 // Main App Component
 const MainApp = () => {
   return (
-    <Stack.Navigator initialRouteName="SplashScreen">
+    <Stack.Navigator initialRouteName="Appeal">
       <Stack.Screen
         name="Splash"
         component={SplashScreen}

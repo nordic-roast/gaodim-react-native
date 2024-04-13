@@ -1,5 +1,13 @@
 import React, { useEffect, useState, useRef } from "react";
-import { View, Text, TextInput, StyleSheet, Button } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  StyleSheet,
+  Button,
+  TouchableOpacity,
+} from "react-native";
+import Clipboard from "@react-native-clipboard/clipboard";
 import { generateGPTPrompt, callGPTAPI } from "../gpt";
 import OCRImage from "../vision";
 import { useRoute } from "@react-navigation/native";
@@ -9,26 +17,25 @@ function removeBase64Prefix(base64String) {
   return commaIndex !== -1 ? base64String.slice(commaIndex + 1) : base64String;
 }
 
-export default function AppealScreen() {
+export default function AppealScreen({ navigation }) {
   const [reason, setReason] = useState("");
   const [gptResponse, setGptResponse] = useState("");
   const route = useRoute();
 
   const { imageURL } = route.params || {}; // Extract imageURL from navigation parameters
-  const visionApiResponse = useRef(null);
+  const visionApiResponse = "";
 
-  // didMound
-  useEffect(() => {
-    OCRImage(imageURL)
-      .then((response) => {
-        console.log("Appeal:", response);
-        visionApiResponse.current = response;
-        console.log("visionResponse:", visionApiResponse.current);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  }, []);
+  async function handleReasonSubmit() {
+    try {
+      const visionApiResponse = await OCRImage(imageURL);
+      const gptPrompt = generateGPTPrompt(reason, visionApiResponse);
+      const gptGeneratedContent = await callGPTAPI(gptPrompt);
+      setGptResponse(gptGeneratedContent);
+    } catch (error) {
+      console.error(error);
+      alert(error);
+    }
+  }
 
   // Function to handle reason input change
   const handleReasonChange = (text) => {
@@ -37,17 +44,12 @@ export default function AppealScreen() {
 
   //assign response from Vision.js
 
-  // Function to send Vision API response to GPT
-  async function sendToGPT(reason, url) {
-    try {
-      const gptPrompt = generateGPTPrompt(reason, visionApiResponse.current);
-      const gptGeneratedContent = await callGPTAPI(gptPrompt);
-      setGptResponse(gptGeneratedContent);
-    } catch (error) {
-      console.error("Error processing response:", error);
-      alert("An error occurred while generating the appeal content.");
-    }
-  }
+  // clipboard
+
+  const copyToClipboard = () => {
+    Clipboard.setString(gptResponse);
+  };
+
   // UI rendering
   return (
     <View style={styles.container}>
@@ -61,10 +63,22 @@ export default function AppealScreen() {
         />
       </View>
       <Button
-        onPress={() => sendToGPT(reason, imageURL)}
+        onPress={() => handleReasonSubmit()}
         title="Get the Appeal Letter Now"
       />
-      {gptResponse ? <Text>{gptResponse}</Text> : null}
+      {gptResponse ? (
+        <View>
+          <Text>{gptResponse}</Text>
+          <Button
+            onPress={() => copyToClipboard()}
+            title="Click here to copy to Clipboard"
+          />
+        </View>
+      ) : null}
+      <Button
+        title="Return to Home Screen"
+        onPress={() => navigation.navigate("Main")}
+      />
     </View>
   );
 }
