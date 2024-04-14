@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, Button } from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
 
 import { auth } from "../firebaseConfig";
 import { signOut, onAuthStateChanged } from "firebase/auth";
@@ -36,7 +36,12 @@ export default function HomeScreen({ navigation }) {
         }}
       >
         <Text>Welcome to GaoDim, {userEmail}</Text>
-        <Button title="Logout" onPress={handleLogout} />
+        <TouchableOpacity
+          style={{ backgroundColor: "pink", padding: "5%" }}
+          onPress={handleLogout}
+        >
+          <Text>Logout</Text>
+        </TouchableOpacity>
       </View>
       <View
         style={{

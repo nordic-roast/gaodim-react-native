@@ -27,7 +27,7 @@ const BottomTabNavigator = () => {
 // Main App Component
 const MainApp = () => {
   return (
-    <Stack.Navigator initialRouteName="Appeal">
+    <Stack.Navigator initialRouteName="Main">
       <Stack.Screen
         name="Splash"
         component={SplashScreen}

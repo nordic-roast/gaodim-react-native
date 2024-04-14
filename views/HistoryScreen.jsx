@@ -41,30 +41,46 @@ const HistoryScreen = () => {
 
   return (
     <div>
-      <h1>History Screen for {userEmail}</h1>
-      {tickets.length != 0 ? (
-        tickets.map((ticket, i) => {
-          return (
-            <View style={{ flexDirection: "row", marginBottom: "5%" }} key={i}>
-              <View style={{ flex: 1 }}>
-                <Text>{i + 1}</Text>
+      <h1>
+        {userEmail.substring(0, userEmail.indexOf("@"))}, here are your GaoDim
+        tickets so far:
+      </h1>
+      <View style={{ marginHorizontal: "auto", width: "80%" }}>
+        {tickets.length != 0 ? (
+          tickets.map((ticket, i) => {
+            return (
+              <View
+                style={{
+                  backgroundColor: "skyblue",
+                  flexDirection: "row",
+                  marginBottom: "5%",
+                  padding: "2%",
+                  borderRadius: "20px",
+                }}
+                key={i}
+              >
+                <View style={{ flex: 1 }}>
+                  <Text>{i + 1}</Text>
+                </View>
+                <View style={{ flex: 4 }}>
+                  <Text style={{ fontWeight: "bold" }}>
+                    Date of submission:{" "}
+                  </Text>
+                  <Text>{ticket["date"]}</Text>
+                  <Text style={{ fontWeight: "bold" }}>Link to ticket: </Text>
+                  <Text>{ticket["url"]}</Text>
+                  <Text style={{ fontWeight: "bold" }}>Letter preview: </Text>
+                  <Text>{ticket["letter"].substring(0, 50)}</Text>
+                  <Text style={{ fontWeight: "bold" }}>Reason provided: </Text>
+                  <Text>{ticket["reason"]}</Text>
+                </View>
               </View>
-              <View style={{ flex: 4 }}>
-                <Text style={{ fontWeight: "bold" }}>Date of submission: </Text>
-                <Text>{ticket["date"]}</Text>
-                <Text style={{ fontWeight: "bold" }}>Link to ticket: </Text>
-                <Text>{ticket["url"]}</Text>
-                <Text style={{ fontWeight: "bold" }}>Letter preview: </Text>
-                <Text>{ticket["letter"].substring(0, 50)}</Text>
-                <Text style={{ fontWeight: "bold" }}>Reason provided: </Text>
-                <Text>{ticket["reason"]}</Text>
-              </View>
-            </View>
-          );
-        })
-      ) : (
-        <Text>You have not submitted any tickets to GaoDim!</Text>
-      )}
+            );
+          })
+        ) : (
+          <Text>You have not submitted any tickets to GaoDim!</Text>
+        )}
+      </View>
     </div>
   );
 };
