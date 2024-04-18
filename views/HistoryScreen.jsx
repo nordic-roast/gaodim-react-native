@@ -19,10 +19,8 @@ const HistoryScreen = () => {
   async function getTickets(userId) {
     try {
       docsSnap = await getDocs(collection(firestore, userId));
-      console.log("get success");
       let ticketList = [];
       docsSnap.forEach((doc) => {
-        console.log(doc.data());
         ticketList.push(doc.data());
       });
       setTickets(ticketList);
