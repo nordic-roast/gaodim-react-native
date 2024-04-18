@@ -5,6 +5,8 @@ import { generateGPTPrompt, callGPTAPI } from "../gpt";
 import OCRImage from "../vision";
 import { useRoute } from "@react-navigation/native";
 
+import { Dropdown, close } from "react-native-element-dropdown";
+
 import { firestore } from "../firebaseConfig";
 import { doc, setDoc } from "@firebase/firestore";
 import { uuidv4 } from "@firebase/util";
@@ -26,6 +28,34 @@ export default function AppealScreen({ navigation }) {
   const [userId, setUserId] = useState("");
   const route = useRoute();
   const [modalVisible, setModalVisible] = useState(false); //Add modal state
+  const [hasCustomReason, setHasCustomReason] = useState(false);
+
+  const defaultReasons = [
+    { label: "I had a medical emergency", value: "I had a medical emergency" },
+    { label: "I had a family emergency", value: "I had a family emergency" },
+    { label: "My car broke down", value: "My car broke down" },
+    {
+      label: "There was nowhere else to park",
+      value: "There was nowhere else to park",
+    },
+    {
+      label: "I misinterpreted the parking rules in the area",
+      value: "I misinterpreted the parking rules in the area",
+    },
+    { label: "I have financial hardship", value: "I have financial hardship" },
+    {
+      label: "I was helping someone in need",
+      value: "I was helping someone in need",
+    },
+    {
+      label: "I have a medical condition",
+      value: "I have a medical condition",
+    },
+    {
+      label: "Other",
+      value: "Other",
+    },
+  ];
 
   async function createTicket(url, navigation, reason, gptGeneratedContent) {
     const ticketRef = doc(firestore, userId, uuidv4());
@@ -45,7 +75,11 @@ export default function AppealScreen({ navigation }) {
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
-      setUserId(user.uid);
+      if (user) {
+        setUserId(user.uid);
+      } else {
+        setUserId("guest");
+      }
     });
   }, []);
 
@@ -92,23 +126,54 @@ export default function AppealScreen({ navigation }) {
     <View style={styles.container}>
       <Text style={styles.title}>Enter Appeal Reason</Text>
       <View style={styles.inputContainer}>
-        <TextInput
+        <Dropdown
           style={styles.input}
-          onChangeText={handleReasonChange}
+          data={defaultReasons}
+          labelField="label"
+          valueField="value"
           value={reason}
-          placeholder="Enter reason"
-        />
+          autoScroll={false}
+          placeholder="Select common reason"
+          placeholderStyle={{ fontStyle: "italic" }}
+          onChange={(item) => {
+            {
+              item.value != "Other"
+                ? (() => {
+                    setHasCustomReason(false);
+                    handleReasonChange(item.value);
+                  })()
+                : (() => {
+                    handleReasonChange("");
+                    setHasCustomReason(true);
+                  })();
+            }
+            close;
+          }}
+        ></Dropdown>
+        {hasCustomReason ? (
+          <TextInput
+            style={styles.input}
+            onChangeText={handleReasonChange}
+            value={reason}
+            placeholder="Elaborate your reason"
+          />
+        ) : null}
+      </View>
+      <Text style={styles.title}>
+        Enter your name to append to the letter (optional)
+      </Text>
+      <View style={styles.inputContainer}>
         <TextInput
           style={styles.input}
           onChangeText={handleFirstNameChange}
           value={firstName}
-          placeholder="First name (optional)"
+          placeholder="First name"
         />
         <TextInput
           style={styles.input}
           onChangeText={handleLastNameChange}
           value={lastName}
-          placeholder="Last name (optional)"
+          placeholder="Last name"
         />
       </View>
       <Button
