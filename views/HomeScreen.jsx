@@ -8,7 +8,11 @@ export default function HomeScreen({ navigation }) {
   const [userEmail, setUserEmail] = useState("");
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
-      setUserEmail(user.email);
+      if (user) {
+        setUserEmail(user.email);
+      } else {
+        setUserEmail("");
+      }
     });
   }, []);
 
@@ -35,12 +39,23 @@ export default function HomeScreen({ navigation }) {
           backgroundColor: "red",
         }}
       >
-        <Text>Welcome to GaoDim, {userEmail}</Text>
+        <Text>
+          Welcome to GaoDim,{" "}
+          {userEmail != ""
+            ? userEmail
+            : "you are now in guest-mode, and you will not have access to History feature"}
+        </Text>
         <TouchableOpacity
           style={{ backgroundColor: "pink", padding: "5%" }}
-          onPress={handleLogout}
+          onPress={
+            userEmail != ""
+              ? handleLogout
+              : () => {
+                  navigation.navigate("Splash");
+                }
+          }
         >
-          <Text>Logout</Text>
+          <Text>{userEmail != "" ? "Logout" : "Back to login screen"}</Text>
         </TouchableOpacity>
       </View>
       <View
