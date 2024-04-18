@@ -1,5 +1,5 @@
 // MainApp.jsx
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import SplashScreen from "../views/SplashScreen";
@@ -10,16 +10,32 @@ import CameraScreen from "../views/CameraScreen";
 import HistoryScreen from "../views/HistoryScreen";
 import AppealScreen from "../views/AppealScreen";
 
+import { auth } from "../firebaseConfig";
+import { onAuthStateChanged } from "firebase/auth";
+
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
 // Component to hold the bottom tabs
 const BottomTabNavigator = () => {
+  const [userLoggedIn, setUserLoggedIn] = useState(false);
+
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUserLoggedIn(true);
+      } else {
+        setUserLoggedIn(false);
+      }
+    });
+  }, []);
   return (
     <Tab.Navigator>
       <Tab.Screen name="Home" component={HomeScreen} />
       <Tab.Screen name="Camera" component={CameraScreen} />
-      <Tab.Screen name="History" component={HistoryScreen} />
+      {userLoggedIn ? (
+        <Tab.Screen name="History" component={HistoryScreen} />
+      ) : null}
     </Tab.Navigator>
   );
 };
