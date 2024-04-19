@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { View, Text } from "react-native";
 
+import LoadingModal from "./LoadingModal";
+
 import { onAuthStateChanged } from "@firebase/auth";
 import { auth } from "../firebaseConfig";
 
@@ -11,12 +13,14 @@ const HistoryScreen = () => {
   const [userEmail, setUserEmail] = useState("");
   const [userId, setUserId] = useState("");
   const [tickets, setTickets] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   // Get tickets for user
 
   let docsSnap;
 
   async function getTickets(userId) {
+    setIsLoading(true);
     try {
       docsSnap = await getDocs(collection(firestore, userId));
       let ticketList = [];
@@ -24,6 +28,7 @@ const HistoryScreen = () => {
         ticketList.push(doc.data());
       });
       setTickets(ticketList);
+      setIsLoading(false);
     } catch (e) {
       console.error(e);
     }
@@ -38,11 +43,12 @@ const HistoryScreen = () => {
   }, []);
 
   return (
-    <div>
-      <h1>
+    <View>
+      <Text>
         {userEmail.substring(0, userEmail.indexOf("@"))}, here are your GaoDim
         tickets so far:
-      </h1>
+      </Text>
+      <LoadingModal isLoading={isLoading}></LoadingModal>
       <View style={{ marginHorizontal: "auto", width: "80%" }}>
         {tickets.length != 0 ? (
           tickets.map((ticket, i) => {
@@ -53,7 +59,7 @@ const HistoryScreen = () => {
                   flexDirection: "row",
                   marginBottom: "5%",
                   padding: "2%",
-                  borderRadius: "20px",
+                  borderRadius: 20,
                 }}
                 key={i}
               >
@@ -79,7 +85,7 @@ const HistoryScreen = () => {
           <Text>You have not submitted any tickets to GaoDim!</Text>
         )}
       </View>
-    </div>
+    </View>
   );
 };
 
