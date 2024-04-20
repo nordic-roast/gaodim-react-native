@@ -10,7 +10,6 @@ import {
 } from 'react-native';
 
 import { auth } from "../firebaseConfig";
-
 import { signInWithEmailAndPassword } from "firebase/auth";
 
 const LoginScreen = ({ navigation }) => {

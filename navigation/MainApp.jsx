@@ -43,7 +43,7 @@ const BottomTabNavigator = () => {
 // Main App Component
 const MainApp = () => {
   return (
-    <Stack.Navigator initialRouteName="Main">
+    <Stack.Navigator initialRouteName="Splash">
       <Stack.Screen
         name="Splash"
         component={SplashScreen}
