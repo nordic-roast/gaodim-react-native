@@ -6,7 +6,7 @@ import SplashScreen from "../views/SplashScreen";
 import LoginScreen from "../views/LoginScreen";
 import RegisterScreen from "../views/RegisterScreen";
 import HomeScreen from "../views/HomeScreen";
-import CameraScreen from "../views/CameraScreen";
+import ImageSelect from "../views/ImageSelect";
 import HistoryScreen from "../views/HistoryScreen";
 import AppealScreen from "../views/AppealScreen";
 
@@ -32,7 +32,7 @@ const BottomTabNavigator = () => {
   return (
     <Tab.Navigator>
       <Tab.Screen name="Home" component={HomeScreen} />
-      <Tab.Screen name="Camera" component={CameraScreen} />
+      <Tab.Screen name="Image" component={ImageSelect} />
       {userLoggedIn ? (
         <Tab.Screen name="History" component={HistoryScreen} />
       ) : null}
@@ -47,11 +47,6 @@ const MainApp = () => {
       <Stack.Screen
         name="Splash"
         component={SplashScreen}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="Camera"
-        component={CameraScreen}
         options={{ headerShown: false }}
       />
       <Stack.Screen
