@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { View, Text, TextInput, StyleSheet, Button, Modal } from "react-native";
-import Clipboard from "@react-native-clipboard/clipboard";
+// import Clipboard from "@react-native-clipboard/clipboard";
 import { generateGPTPrompt, callGPTAPI } from "../gpt";
 import OCRImage from "../vision";
 import { useRoute } from "@react-navigation/native";
@@ -12,6 +12,7 @@ import { doc, setDoc } from "@firebase/firestore";
 import { uuidv4 } from "@firebase/util";
 import { onAuthStateChanged } from "@firebase/auth";
 import { auth } from "../firebaseConfig";
+import LoadingModal from "./LoadingModal";
 
 // Creating ticket once chatGPT response is produced
 
@@ -29,6 +30,7 @@ export default function AppealScreen({ navigation }) {
   const route = useRoute();
   const [modalVisible, setModalVisible] = useState(false); //Add modal state
   const [hasCustomReason, setHasCustomReason] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const defaultReasons = [
     { label: "I had a medical emergency", value: "I had a medical emergency" },
@@ -87,6 +89,7 @@ export default function AppealScreen({ navigation }) {
   const visionApiResponse = "";
 
   async function handleReasonSubmit() {
+    setIsLoading(true);
     try {
       const visionApiResponse = await OCRImage(imageURL);
       const gptPrompt = generateGPTPrompt(
@@ -97,6 +100,7 @@ export default function AppealScreen({ navigation }) {
       );
       const gptGeneratedContent = await callGPTAPI(gptPrompt);
       await createTicket(imageURL, navigation, reason, gptGeneratedContent);
+      setIsLoading(false);
       setGptResponse(gptGeneratedContent);
     } catch (error) {
       console.error(error);
@@ -117,9 +121,9 @@ export default function AppealScreen({ navigation }) {
 
   // Clipboard handling
 
-  const copyToClipboard = () => {
-    Clipboard.setString(gptResponse);
-  };
+  // const copyToClipboard = () => {
+  //   Clipboard.setString(gptResponse);
+  // };
 
   // UI rendering
   return (
@@ -180,6 +184,7 @@ export default function AppealScreen({ navigation }) {
         onPress={() => handleReasonSubmit()}
         title="Get the Appeal Letter Now"
       />
+      <LoadingModal isLoading={isLoading}></LoadingModal>
       <Modal
         animationType="slide"
         transparent={true}
@@ -202,10 +207,10 @@ export default function AppealScreen({ navigation }) {
                 onPress={() => setModalVisible(!modalVisible)} //close the modal when clicking change reason
                 title="Change the appeal reason"
               />
-              <Button
+              {/* <Button
                 onPress={() => copyToClipboard()}
                 title="Click here to copy to Clipboard"
-              />
+              /> */}
             </View>
           </View>
         </View>
