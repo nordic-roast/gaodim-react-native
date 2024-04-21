@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { View, Text, TextInput, StyleSheet, Button, Modal } from "react-native";
-// import Clipboard from "@react-native-clipboard/clipboard";
+import * as Clipboard from "expo-clipboard";
 import { generateGPTPrompt, callGPTAPI } from "../gpt";
 import OCRImage from "../vision";
 import { useRoute } from "@react-navigation/native";
@@ -121,9 +121,9 @@ export default function AppealScreen({ navigation }) {
 
   // Clipboard handling
 
-  // const copyToClipboard = () => {
-  //   Clipboard.setString(gptResponse);
-  // };
+  async function copyToClipboard() {
+    await Clipboard.setStringAsync(gptResponse);
+  }
 
   // UI rendering
   return (
@@ -207,10 +207,10 @@ export default function AppealScreen({ navigation }) {
                 onPress={() => setModalVisible(!modalVisible)} //close the modal when clicking change reason
                 title="Change the appeal reason"
               />
-              {/* <Button
+              <Button
                 onPress={() => copyToClipboard()}
                 title="Click here to copy to Clipboard"
-              /> */}
+              />
             </View>
           </View>
         </View>
