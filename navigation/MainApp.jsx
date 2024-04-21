@@ -29,15 +29,22 @@ const BottomTabNavigator = () => {
       }
     });
   }, []);
-  return (
-    <Tab.Navigator>
-      {userLoggedIn ? <Tab.Screen name="Home" component={HomeScreen} /> : null}
-      <Tab.Screen name="Image" component={ImageSelect} />
-      {userLoggedIn ? (
+
+  if (userLoggedIn) {
+    return (
+      <Tab.Navigator>
+        <Tab.Screen name="Home" component={HomeScreen} />
+        <Tab.Screen name="Image" component={ImageSelect} />
         <Tab.Screen name="History" component={HistoryScreen} />
-      ) : null}
-    </Tab.Navigator>
-  );
+      </Tab.Navigator>
+    );
+  } else {
+    return (
+      <Tab.Navigator>
+        <Tab.Screen name="Image" component={ImageSelect} />
+      </Tab.Navigator>
+    );
+  }
 };
 
 // Main App Component

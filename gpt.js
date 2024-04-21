@@ -1,15 +1,7 @@
 import OpenAI from "openai";
 
 // Function to generate GPT prompt
-export function generateGPTPrompt(
-  reason,
-  visionApiResponse,
-  firstName,
-  lastName
-) {
-  const nameContext =
-    firstName != "" || lastName != "" ? `${firstName} ${lastName}` : "";
-
+export function generateGPTPrompt(reason, visionApiResponse) {
   const prompt = `
   You have received a parking violation notice, and the extracted content from the ticket includes: ${JSON.stringify(
     visionApiResponse

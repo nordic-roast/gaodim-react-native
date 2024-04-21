@@ -1,19 +1,23 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity, ScrollView } from "react-native";
 
 import LoadingModal from "./LoadingModal";
+import LetterModal from "./LetterModal";
 
 import { onAuthStateChanged } from "@firebase/auth";
 import { auth } from "../firebaseConfig";
 
 import { firestore } from "../firebaseConfig";
 import { collection, getDocs } from "@firebase/firestore";
+import { set } from "firebase/database";
 
-const HistoryScreen = () => {
+const HistoryScreen = ({ navigation }) => {
   const [userEmail, setUserEmail] = useState("");
   const [userId, setUserId] = useState("");
   const [tickets, setTickets] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [selectedText, setSelectedText] = useState("");
+  const [modalVisible, setModalVisible] = useState(false);
 
   // Get tickets for user
 
@@ -43,13 +47,25 @@ const HistoryScreen = () => {
   }, []);
 
   return (
-    <View>
+    <View style={{ alignItems: "center" }}>
       <Text>
         {userEmail.substring(0, userEmail.indexOf("@"))}, here are your GaoDim
         tickets so far:
       </Text>
       <LoadingModal isLoading={isLoading}></LoadingModal>
-      <View style={{ marginHorizontal: "auto", width: "80%" }}>
+      <LetterModal
+        navigation={navigation}
+        text={selectedText}
+        modalVisible={modalVisible}
+        setModalVisible={setModalVisible}
+        needChanging={false}
+      ></LetterModal>
+      <ScrollView
+        style={{
+          marginHorizontal: "auto",
+          width: "80%",
+        }}
+      >
         {tickets.length != 0 ? (
           tickets.map((ticket, i) => {
             return (
@@ -82,7 +98,15 @@ const HistoryScreen = () => {
                   <TouchableOpacity
                     style={{ backgroundColor: "white", borderRadius: 20 }}
                   >
-                    <Text style={{ textAlign: "center" }}>View Letter</Text>
+                    <Text
+                      onPress={() => {
+                        setSelectedText(ticket["letter"]);
+                        setModalVisible(true);
+                      }}
+                      style={{ textAlign: "center" }}
+                    >
+                      View Letter
+                    </Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -91,7 +115,7 @@ const HistoryScreen = () => {
         ) : (
           <Text>You have not submitted any tickets to GaoDim!</Text>
         )}
-      </View>
+      </ScrollView>
     </View>
   );
 };

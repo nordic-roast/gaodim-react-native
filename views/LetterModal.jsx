@@ -1,8 +1,21 @@
-import { View, Text, StyleSheet, Button, Modal } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Modal,
+  TouchableOpacity,
+  ScrollView,
+} from "react-native";
 
 import * as Clipboard from "expo-clipboard";
 
-function LetterModal({ text, modalVisible, setModalVisible }) {
+function LetterModal({
+  navigation,
+  text,
+  modalVisible,
+  setModalVisible,
+  needChanging,
+}) {
   async function copyToClipboard() {
     await Clipboard.setStringAsync(text);
   }
@@ -16,24 +29,48 @@ function LetterModal({ text, modalVisible, setModalVisible }) {
         setModalVisible(!modalVisible);
       }}
     >
-      <View style={styles.centeredView}>
-        <View style={styles.modalView}>
-          {text ? (
-            <View>
-              <Text style={styles.modalText}>{text}</Text>
-            </View>
+      <View style={[styles.modalView]}>
+        <View
+          style={{
+            flex: 1,
+            width: "100%",
+            flexDirection: "row-reverse",
+            justifyContent: "flex-start",
+          }}
+        >
+          <TouchableOpacity
+            style={[styles.closeButtonContainer]}
+            onPress={() => {
+              console.log(">>>>>> close");
+              setModalVisible(!modalVisible);
+              navigation.navigate("Main");
+            }}
+          >
+            <Text style={styles.closeButtonText}>x</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={{ flex: 15, width: "100%", paddingVertical: "5%" }}>
+          <ScrollView style={{ flex: 1, backgroundColor: "#F0FFF0" }}>
+            {text ? <Text style={styles.modalText}>{text}</Text> : null}
+          </ScrollView>
+        </View>
+        <View
+          style={{ flex: 4, width: "100%", justifyContent: "space-between" }}
+        >
+          {needChanging ? (
+            <TouchableOpacity
+              style={styles.modalButton}
+              onPress={() => setModalVisible(!modalVisible)}
+            >
+              <Text style={styles.buttonText}>Change the Appeal Reason</Text>
+            </TouchableOpacity>
           ) : null}
-          <View style={styles.fixToText}>
-            <Button
-              style={[styles.button, styles.buttonClose]}
-              onPress={() => setModalVisible(!modalVisible)} //close the modal when clicking change reason
-              title="Change the appeal reason"
-            />
-            <Button
-              onPress={() => copyToClipboard()}
-              title="Click here to copy to Clipboard"
-            />
-          </View>
+          <TouchableOpacity
+            style={styles.modalButton}
+            onPress={() => copyToClipboard()}
+          >
+            <Text style={styles.buttonText}>Copy</Text>
+          </TouchableOpacity>
         </View>
       </View>
     </Modal>
@@ -41,29 +78,80 @@ function LetterModal({ text, modalVisible, setModalVisible }) {
 }
 
 const styles = StyleSheet.create({
-  centeredView: {
+  inputContainer: {
+    width: "80%",
+    color: "#fff",
+    flex: 3,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  input: {
+    height: 40,
+    borderColor: "gray",
+    backgroundColor: "#fff",
+    borderWidth: 1,
+    paddingHorizontal: 10,
+    width: "100%",
+    marginBottom: "5%",
+  },
+
+  modalView: {
+    padding: "5%",
+    margin: "5%",
     flex: 1,
+    backgroundColor: "#fff",
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 22,
   },
-  modalView: {
-    margin: 20,
-    backgroundColor: "white",
-    borderRadius: 20,
-    podding: 35,
+
+  buttonContainer: {
+    flex: 1,
+    width: "100%",
     alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
+    justifyContent: "space-around",
   },
+
+  button: {
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#35C2C1",
+    width: "80%",
+    height: "40%",
+    borderRadius: 25,
+    marginTop: 8,
+  },
+
+  buttonText: {
+    color: "#fff",
+  },
+
+  modalButton: {
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#35C2C1",
+    height: "40%",
+    borderRadius: 8,
+  },
+
   modalText: {
-    marginBottom: 15,
+    marginBottom: 20,
+    padding: 30,
+    lineHeight: 20,
+    textAlign: "justify",
+    fontSize: 18,
+  },
+
+  closeButtonContainer: {
+    backgroundColor: "#35C2C1",
+    alignItems: "center",
+    paddingHorizontal: "3%",
+    justifyContent: "center",
+    borderRadius: 50,
+  },
+
+  closeButtonText: {
+    color: "black",
+    fontSize: 20,
   },
 });
 
