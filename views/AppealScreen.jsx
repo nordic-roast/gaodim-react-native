@@ -1,5 +1,14 @@
-import React, { useEffect, useState } from "react";
-import { View, Text, TextInput, StyleSheet, Button } from "react-native";
+import React, { useEffect, useState, useRef } from "react";
+import {
+  View,
+  Text,
+  TextInput,
+  StyleSheet,
+  TouchableOpacity,
+  Button,
+  Modal,
+} from "react-native";
+import * as Clipboard from "expo-clipboard";
 import { generateGPTPrompt, callGPTAPI } from "../gpt";
 import OCRImage from "../vision";
 import { useRoute } from "@react-navigation/native";
@@ -124,7 +133,9 @@ export default function AppealScreen({ navigation }) {
   // UI rendering
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Enter Appeal Reason</Text>
+      <Text style={styles.screenTitle}>
+        Under what grounds do you want to contest the ticket?
+      </Text>
       <View style={styles.inputContainer}>
         <Dropdown
           style={styles.input}
@@ -156,9 +167,11 @@ export default function AppealScreen({ navigation }) {
             onChangeText={handleReasonChange}
             value={reason}
             placeholder="Elaborate your reason"
+            placeholderTextColor="#ffffff"
           />
         ) : null}
       </View>
+      {/*
       <Text style={styles.title}>
         Enter your name to append to the letter (optional)
       </Text>
@@ -176,11 +189,62 @@ export default function AppealScreen({ navigation }) {
           placeholder="Last name"
         />
       </View>
-      <Button
+        */}
+      <TouchableOpacity
         onPress={() => handleReasonSubmit()}
-        title="Get the Appeal Letter Now"
-      />
+        style={[styles.getButton]}
+      >
+        <Text style={styles.title}>Get the Appeal Letter Now</Text>
+      </TouchableOpacity>
       <LoadingModal isLoading={isLoading}></LoadingModal>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          Alert.alert("Modal has been closed.");
+          setModalVisible(!modalVisible);
+        }}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <View style={styles.contentContainer}>
+              <TouchableOpacity
+                style={[styles.changeButton]}
+                onPress={() => setModalVisible(!modalVisible)} //close the modal when clicking change reason
+              >
+                <Text style={styles.title}>Change the appeal reason</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.copyButton}
+                onPress={() => copyToClipboard()}
+              >
+                <Text style={styles.title}>Copy</Text>
+              </TouchableOpacity>
+              {gptResponse ? (
+                <View>
+                  <Text style={styles.modalText}>{gptResponse}</Text>
+                </View>
+              ) : null}
+              <TouchableOpacity
+                style={styles.closeButtonContainer}
+                onPress={() => {
+                  setModalVisible(!modalVisible);
+                  navigation.navigate("Home");
+                }}
+              >
+                <Text style={styles.closeButtonText}>X</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
+      <TouchableOpacity
+        style={[styles.reasonButton]}
+        onPress={() => navigation.navigate("Main")} //close the modal when clicking change reason
+      >
+        <Text style={styles.title}>Take Picture Again</Text>
+      </TouchableOpacity>
       <LetterModal
         text="testing"
         modalVisible={modalVisible}
@@ -198,21 +262,126 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    backgroundColor: "#191A1F",
+    padding: 20,
+  },
+  screenTitle: {
+    color: "#fff",
+    marginBottom: 20,
+    marginTop: 100,
+    fontSize: 27,
+    fontWeight: 700,
+    lineHeight: 32.4,
+    textAlign: "center",
   },
   title: {
+    color: "#fff",
     fontSize: 20,
     marginBottom: 20,
   },
+
   inputContainer: {
     width: "80%",
     marginBottom: 20,
+    color: "#fff",
   },
   input: {
     height: 40,
     borderColor: "gray",
+    backgroundColor: "#fff",
     borderWidth: 1,
     paddingHorizontal: 10,
     width: "100%",
     marginBottom: "5%",
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 22,
+  },
+  modalView: {
+    position: "absolute",
+    bottom: 10,
+    margin: 10,
+    backgroundColor: "white",
+    borderRadius: 20,
+    podding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  copyButton: {
+    position: "absolute",
+    top: -120,
+    left: 25,
+    padding: 15,
+    marginVertical: 5,
+    alignItems: "center",
+    backgroundColor: "#35C2C1",
+    width: 331,
+    height: 50,
+    borderRadius: 8,
+  },
+  changeButton: {
+    position: "absolute",
+    top: -60,
+    left: 25,
+    padding: 15,
+    marginVertical: 5,
+    alignItems: "center",
+    backgroundColor: "#35C2C1",
+    width: 331,
+    height: 50,
+    borderRadius: 8,
+  },
+  reasonButton: {
+    position: "absolute",
+    top: 703,
+    left: 25,
+    padding: 15,
+    marginVertical: 5,
+    alignItems: "center",
+    backgroundColor: "#35C2C1",
+    width: 331,
+    height: 56,
+    borderRadius: 8,
+  },
+  getButton: {
+    position: "absolute",
+    top: 633,
+    left: 25,
+    padding: 15,
+    marginVertical: 5,
+    alignItems: "center",
+    backgroundColor: "#35C2C1",
+    width: 331,
+    height: 56,
+    borderRadius: 8,
+  },
+
+  modalText: {
+    marginBottom: 20,
+    padding: 30,
+  },
+
+  closeButtonContainer: {
+    position: "absolute",
+    top: 10,
+    right: 50,
+  },
+  closeButtonText: {
+    color: "black",
+    fontSize: 20,
+  },
+  contentContainer: {
+    position: "relative",
+    zIndex: 1,
   },
 });

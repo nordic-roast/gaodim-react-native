@@ -17,9 +17,7 @@ export function generateGPTPrompt(
   To effectively appeal this notice, it's essential to understand the context of the ticket and combine it with your reason to craft a compelling appeal letter.
   Here is some additional context or information (Reason: ${reason}) that could assist in appealing this notice.
 
-  Generate a response in the format of a formal appeal letter, with salutations and sign-offs.
-
-  ${nameContext != "" ? `Your name is ${nameContext}.` : ""}
+  Generate a response in the format of a formal appeal letter, with salutations, no need to show the header, signature, sign-offs.
     `;
 
   return prompt.trim();
