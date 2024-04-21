@@ -54,8 +54,8 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   logoContainer: {
-    width: "341px",
-    height: "341px",
+    width: "50%",
+    height: "50%",
   },
   logo: {
     width: "100%",

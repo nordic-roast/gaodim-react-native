@@ -102,7 +102,6 @@ const styles = StyleSheet.create({
   welcomeText: {
     fontSize: 28,
     color: "#FFF",
-    float: "left",
     marginBottom: 30,
   },
   inputField: {

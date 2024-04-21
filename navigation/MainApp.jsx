@@ -31,7 +31,7 @@ const BottomTabNavigator = () => {
   }, []);
   return (
     <Tab.Navigator>
-      <Tab.Screen name="Home" component={HomeScreen} />
+      {userLoggedIn ? <Tab.Screen name="Home" component={HomeScreen} /> : null}
       <Tab.Screen name="Image" component={ImageSelect} />
       {userLoggedIn ? (
         <Tab.Screen name="History" component={HistoryScreen} />
@@ -43,7 +43,7 @@ const BottomTabNavigator = () => {
 // Main App Component
 const MainApp = () => {
   return (
-    <Stack.Navigator initialRouteName="Splash">
+    <Stack.Navigator initialRouteName="Appeal">
       <Stack.Screen
         name="Splash"
         component={SplashScreen}

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text } from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
 
 import LoadingModal from "./LoadingModal";
 
@@ -77,6 +77,13 @@ const HistoryScreen = () => {
                   <Text>{ticket["letter"].substring(0, 50)}</Text>
                   <Text style={{ fontWeight: "bold" }}>Reason provided: </Text>
                   <Text>{ticket["reason"]}</Text>
+                </View>
+                <View style={{ flex: 1, justifyContent: "center" }}>
+                  <TouchableOpacity
+                    style={{ backgroundColor: "white", borderRadius: 20 }}
+                  >
+                    <Text style={{ textAlign: "center" }}>View Letter</Text>
+                  </TouchableOpacity>
                 </View>
               </View>
             );
