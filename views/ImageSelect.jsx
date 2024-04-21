@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, Button, Image } from "react-native";
+import { View, Text, Button, Image, StyleSheet } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import "react-native-get-random-values";
 import { v4 as uuidv4 } from "uuid";
@@ -84,4 +84,5 @@ export default function ImageSelect() {
       ) : null}
     </View>
   );
+  
 }

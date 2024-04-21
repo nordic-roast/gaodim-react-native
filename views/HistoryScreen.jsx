@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text } from "react-native";
+import { View, Text, ScrollView, StyleSheet } from "react-native";
 
 import LoadingModal from "./LoadingModal";
 
@@ -43,7 +43,7 @@ const HistoryScreen = () => {
   }, []);
 
   return (
-    <View>
+    <ScrollView style={styles.container}>
       <Text>
         {userEmail.substring(0, userEmail.indexOf("@"))}, here are your GaoDim
         tickets so far:
@@ -85,8 +85,103 @@ const HistoryScreen = () => {
           <Text>You have not submitted any tickets to GaoDim!</Text>
         )}
       </View>
-    </View>
+    </ScrollView>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#191A1F',
+  },
+  guestText: {
+    color: '#35C2C1',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    fontSize: 18,
+    marginTop: 15,
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: 20,
+    backgroundColor: '#191A1F',
+  },
+  content: {
+    padding: 20,
+  },
+  appealSection: {
+    backgroundColor: '#fff',
+    borderRadius: 8,
+    padding: 15,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3, // for Android
+    marginBottom: 20,
+  },
+  appealItem: {
+    backgroundColor: '#fff',
+    borderRadius: 8,
+    padding: 15,
+    marginBottom: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  appealIndicator: {
+    width: 10,
+    height: 10,
+    borderRadius: 5,
+    backgroundColor: 'green',
+    marginRight: 10,
+  },
+  appealInfo: {
+    flex: 1,
+  },
+  appealTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 5,
+  },
+  appealId: {
+    fontSize: 12,
+    color: '#555',
+  },
+  fileAppealButton: {
+    backgroundColor: '#000',
+    borderRadius: 20,
+    paddingVertical: 8,
+    paddingHorizontal: 15,
+    alignSelf: 'flex-start',
+  },
+  fileAppealButtonText: {
+    color: '#fff',
+    fontSize: 12,
+    fontWeight: 'bold',
+  }, 
+  actionItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: '#fff',
+    borderColor: '#555',  
+    borderRadius: 8,
+    padding: 15,
+    marginBottom: 10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3, // for Android
+  },
+  actionItemText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#000',
+  },
+});
 
 export default HistoryScreen;
