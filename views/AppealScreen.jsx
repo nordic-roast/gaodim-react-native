@@ -5,7 +5,7 @@ import {
   TextInput,
   StyleSheet,
   TouchableOpacity,
-  Button,
+  ScrollView,
   Modal,
 } from "react-native";
 import * as Clipboard from "expo-clipboard";
@@ -21,6 +21,7 @@ import { uuidv4 } from "@firebase/util";
 import { onAuthStateChanged } from "@firebase/auth";
 import { auth } from "../firebaseConfig";
 import LoadingModal from "./LoadingModal";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import LetterModal from "./LetterModal";
 
 // Creating ticket once chatGPT response is produced
@@ -40,6 +41,8 @@ export default function AppealScreen({ navigation }) {
   const [modalVisible, setModalVisible] = useState(false); //Add modal state
   const [hasCustomReason, setHasCustomReason] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+
+  const insets = useSafeAreaInsets();
 
   const defaultReasons = [
     { label: "I had a medical emergency", value: "I had a medical emergency" },
@@ -133,10 +136,10 @@ export default function AppealScreen({ navigation }) {
   // UI rendering
   return (
     <View style={styles.container}>
-      <Text style={styles.screenTitle}>
-        Under what grounds do you want to contest the ticket?
-      </Text>
       <View style={styles.inputContainer}>
+        <Text style={styles.screenTitle}>
+          Under what grounds do you want to contest the ticket?
+        </Text>
         <Dropdown
           style={styles.input}
           data={defaultReasons}
@@ -196,6 +199,13 @@ export default function AppealScreen({ navigation }) {
       >
         <Text style={styles.title}>Get the Appeal Letter Now</Text>
       </TouchableOpacity>
+      <TouchableOpacity
+        style={[styles.reasonButton]}
+        onPress={() => navigation.navigate("Main")} //close the modal when clicking change reason
+      >
+        <Text style={styles.title}>Take Picture Again</Text>
+      </TouchableOpacity>
+
       <LoadingModal isLoading={isLoading}></LoadingModal>
       <Modal
         animationType="slide"
@@ -206,54 +216,41 @@ export default function AppealScreen({ navigation }) {
           setModalVisible(!modalVisible);
         }}
       >
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            <View style={styles.contentContainer}>
-              <TouchableOpacity
-                style={[styles.changeButton]}
-                onPress={() => setModalVisible(!modalVisible)} //close the modal when clicking change reason
-              >
-                <Text style={styles.title}>Change the appeal reason</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.copyButton}
-                onPress={() => copyToClipboard()}
-              >
-                <Text style={styles.title}>Copy</Text>
-              </TouchableOpacity>
-              {gptResponse ? (
-                <View>
-                  <Text style={styles.modalText}>{gptResponse}</Text>
-                </View>
-              ) : null}
-              <TouchableOpacity
-                style={styles.closeButtonContainer}
-                onPress={() => {
-                  setModalVisible(!modalVisible);
-                  navigation.navigate("Home");
-                }}
-              >
-                <Text style={styles.closeButtonText}>X</Text>
-              </TouchableOpacity>
-            </View>
+        <View style={[styles.modalView, { paddingTop: insets.top }]}>
+          <TouchableOpacity
+            style={[styles.closeButtonContainer, { top: insets.top }]}
+            onPress={() => {
+              console.log(">>>>>> close");
+              setModalVisible(!modalVisible);
+              navigation.navigate("Home");
+            }}
+          >
+            <Text style={styles.closeButtonText}>X</Text>
+          </TouchableOpacity>
+          <ScrollView contentContainerStyle={styles.contentContainer}>
+            {gptResponse ? (
+              <View style={styles.scrContent}>
+                <Text style={styles.modalText}>{gptResponse}</Text>
+                <View style={styles.textBottomView} />
+              </View>
+            ) : null}
+          </ScrollView>
+          <View style={styles.btnView}>
+            <TouchableOpacity
+              style={[styles.changeButton]}
+              onPress={() => setModalVisible(!modalVisible)} //close the modal when clicking change reason
+            >
+              <Text style={styles.title}>Change the Appeal Reason</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.copyButton}
+              onPress={() => copyToClipboard()}
+            >
+              <Text style={styles.title}>Copy</Text>
+            </TouchableOpacity>
           </View>
         </View>
       </Modal>
-      <TouchableOpacity
-        style={[styles.reasonButton]}
-        onPress={() => navigation.navigate("Main")} //close the modal when clicking change reason
-      >
-        <Text style={styles.title}>Take Picture Again</Text>
-      </TouchableOpacity>
-      <LetterModal
-        text="testing"
-        modalVisible={modalVisible}
-        setModalVisible={setModalVisible}
-      ></LetterModal>
-      <Button
-        title="Return to Home Screen"
-        onPress={() => navigation.navigate("Main")}
-      />
     </View>
   );
 }
@@ -267,8 +264,7 @@ const styles = StyleSheet.create({
   },
   screenTitle: {
     color: "#fff",
-    marginBottom: 20,
-    marginTop: 100,
+    marginBottom: 100,
     fontSize: 27,
     fontWeight: 700,
     lineHeight: 32.4,
@@ -277,13 +273,15 @@ const styles = StyleSheet.create({
   title: {
     color: "#fff",
     fontSize: 20,
-    marginBottom: 20,
+    // marginBottom: 20,
   },
 
   inputContainer: {
     width: "80%",
-    marginBottom: 20,
     color: "#fff",
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
   },
   input: {
     height: 40,
@@ -301,40 +299,30 @@ const styles = StyleSheet.create({
     marginTop: 22,
   },
   modalView: {
-    position: "absolute",
-    bottom: 10,
-    margin: 10,
-    backgroundColor: "white",
-    borderRadius: 20,
-    podding: 35,
+    flex: 1,
+    backgroundColor: "#fff",
+    justifyContent: "center",
     alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
   },
   copyButton: {
-    position: "absolute",
-    top: -120,
-    left: 25,
+    // position: "absolute",
+    // top: -120,
+    // left: 25,
     padding: 15,
-    marginVertical: 5,
+    // marginVertical: 5,
     alignItems: "center",
     backgroundColor: "#35C2C1",
     width: 331,
     height: 50,
     borderRadius: 8,
+    marginTop: 8,
   },
   changeButton: {
-    position: "absolute",
-    top: -60,
-    left: 25,
+    // position: "absolute",
+    // top: -60,
+    // left: 25,
     padding: 15,
-    marginVertical: 5,
+    // marginVertical: 5,
     alignItems: "center",
     backgroundColor: "#35C2C1",
     width: 331,
@@ -342,46 +330,80 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   reasonButton: {
-    position: "absolute",
-    top: 703,
-    left: 25,
+    // position: "absolute",
+    // top: 703,
+    // left: 25,
     padding: 15,
-    marginVertical: 5,
-    alignItems: "center",
+    // marginVertical: 5,
+    // alignItems: "center",
     backgroundColor: "#35C2C1",
     width: 331,
     height: 56,
     borderRadius: 8,
+    marginTop: 16,
+    alignItems: "center",
+    justifyContent: "center",
+    marginBottom: 88,
   },
   getButton: {
-    position: "absolute",
-    top: 633,
-    left: 25,
+    // position: "absolute",
+    // top: 633,
+    // left: 25,
     padding: 15,
-    marginVertical: 5,
-    alignItems: "center",
+    // marginVertical: 5,
+    // alignItems: "center",
     backgroundColor: "#35C2C1",
     width: 331,
     height: 56,
     borderRadius: 8,
+    alignItems: "center",
+    justifyContent: "center",
   },
 
   modalText: {
     marginBottom: 20,
     padding: 30,
+    lineHeight: 20,
+    textAlign: "justify",
+    fontSize: 18,
   },
 
   closeButtonContainer: {
     position: "absolute",
     top: 10,
-    right: 50,
+    right: 10,
+    zIndex: 1,
+    height: 44,
+    width: 44,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#b1b1b1",
+    borderRadius: 22,
   },
   closeButtonText: {
     color: "black",
     fontSize: 20,
   },
   contentContainer: {
-    position: "relative",
-    zIndex: 1,
+    // position: "relative",
+    alignItems: "center",
+    justifyContent: "center",
+    // flex: 1,
+  },
+  scrContent: {
+    flex: 1,
+    paddingTop: 30,
+  },
+  btnView: {
+    position: "absolute",
+    bottom: 0,
+    backgroundColor: "#fff",
+    paddingBottom: 20,
+    paddingTop: 10,
+    borderTopColor: "rgba(0, 0, 0, 0.4)",
+    borderTopWidth: StyleSheet.hairlineWidth,
+  },
+  textBottomView: {
+    height: 50 + 50 + 8 + 20,
   },
 });
