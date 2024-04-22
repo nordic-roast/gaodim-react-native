@@ -3,6 +3,7 @@ import { View, Text, Image, TouchableOpacity, ScrollView, StyleSheet } from 'rea
 import { Ionicons } from '@expo/vector-icons';
 import { auth } from "../firebaseConfig";
 import { signOut, onAuthStateChanged } from "firebase/auth";
+import LetterModal from "./LetterModal";
 import { firestore } from "../firebaseConfig";
 import { collection, query, orderBy, limit, getDocs } from "firebase/firestore";
 
@@ -10,6 +11,10 @@ const HomeScreen = ({ navigation }) => {
   const [userEmail, setUserEmail] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [latestTicket, setLatestTicket] = useState(null);
+  const [tickets, setTickets] = useState([]);
+
+  // Get tickets for user
+  let docsSnap;
 
 
   useEffect(() => {
@@ -17,7 +22,7 @@ const HomeScreen = ({ navigation }) => {
       if (user) {
         setUserEmail(user.email);
         setIsLoggedIn(true);
-        fetchLatestTicket();
+        fetchLatestTicket(user.uid);
       } else {
         setUserEmail("");
         setIsLoggedIn(false);
@@ -27,11 +32,19 @@ const HomeScreen = ({ navigation }) => {
   }, []);
 
 
-  const fetchLatestTicket = async () => {
-    const q = query(collection(firestore, userId), orderBy("date", "desc"), limit(1));
-    const querySnapshot = await getDocs(q);
-    const data = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))[0];
-    setLatestTicket(data);
+  async function fetchLatestTicket(userId) {
+    try {
+      const q = query(collection(firestore, userId), orderBy("date", "desc"), limit(1));
+      docsSnap = await getDocs(q);
+      let ticketList = [];
+      docsSnap.forEach((doc) => {
+        ticketList.push(doc.data());
+      });
+      setTickets(ticketList);
+    }
+    catch (e) {
+      console.error(e);
+    }
   };
 
   function handleLogout() {
@@ -71,26 +84,32 @@ const HomeScreen = ({ navigation }) => {
           <View style={styles.content}>
 
             {/* Appeals Section */}
-            <View style={styles.content}>
-              {/* Latest Ticket Section */}
-              <View style={styles.appealSection}>
-                <Text style={styles.appealsHeader}>Latest Ticket</Text>
-                {latestTicket ? (
-                  <TouchableOpacity onPress={() => {/* Navigate to ticket details */ }} style={styles.appealItem}>
-                    <View style={styles.appealIndicator} />
-                    <View style={styles.appealInfo}>
-                      <Text style={styles.appealTitle}>{latestTicket.title}</Text>
-                      <Text style={styles.appealId}>{latestTicket.id}</Text>
-                    </View>
-                    <TouchableOpacity onPress={() => {/* Handle view more */ }} style={styles.fileAppealButton}>
-                      <Text style={styles.fileAppealButtonText}>View more</Text>
-                    </TouchableOpacity>
-                  </TouchableOpacity>
-                ) : (
-                  <Text>No tickets found.</Text>
-                )}
-              </View>
-            </View>
+            {tickets.length != 0 ? (
+              tickets.map((ticket, i) => {
+                <View style={styles.content}>
+                  {/* Latest Ticket Section */}
+                  <View style={styles.appealSection}>
+                    <Text style={styles.appealsHeader}>Latest Ticket</Text>
+                    {latestTicket ? (
+                      <TouchableOpacity onPress={() => {/* Navigate to ticket details */ }} style={styles.appealItem}>
+                        <View style={styles.appealIndicator} />
+                        <View style={styles.appealInfo}>
+                          <Text style={styles.appealTitle}>{ticket["letter"].substring(0, 50)}</Text>
+                          <Text style={styles.appealId}></Text>
+                        </View>
+                        <TouchableOpacity onPress={() => {/* Handle view more */ }} style={styles.fileAppealButton}>
+                          <Text style={styles.fileAppealButtonText}>View more</Text>
+                        </TouchableOpacity>
+                      </TouchableOpacity>
+                    ) : (
+                      <Text style={styles.guestText}>No tickets found.</Text>
+                    )}
+                  </View>
+                </View>
+              })
+            ): (
+              <Text> no tickets found</Text>
+            )}
 
             {/* More Actions Section */}
             <View style={styles.actionsSection}>
