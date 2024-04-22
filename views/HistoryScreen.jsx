@@ -1,5 +1,11 @@
-import React, { useState, useEffect } from "react"; 
-import { View, Text, TouchableOpacity, ScrollView, StyleSheet } from "react-native";  
+import React, { useState, useEffect } from "react";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  ScrollView,
+  StyleSheet,
+} from "react-native";
 import LoadingModal from "./LoadingModal";
 import LetterModal from "./LetterModal";
 
@@ -7,7 +13,13 @@ import { onAuthStateChanged } from "@firebase/auth";
 import { auth } from "../firebaseConfig";
 
 import { firestore } from "../firebaseConfig";
-import { collection, getDocs } from "@firebase/firestore";
+import {
+  collection,
+  getDocs,
+  query,
+  orderBy,
+  limit,
+} from "@firebase/firestore";
 import { set } from "firebase/database";
 
 const HistoryScreen = ({ navigation }) => {
@@ -24,7 +36,8 @@ const HistoryScreen = ({ navigation }) => {
   async function getTickets(userId) {
     setIsLoading(true);
     try {
-      docsSnap = await getDocs(collection(firestore, userId));
+      const q = query(collection(firestore, userId), orderBy("date", "desc"));
+      docsSnap = await getDocs(q);
       let ticketList = [];
       docsSnap.forEach((doc) => {
         ticketList.push(doc.data());
@@ -121,31 +134,31 @@ const HistoryScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#191A1F',
+    backgroundColor: "#191A1F",
   },
   guestText: {
-    color: '#35C2C1',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    color: "#35C2C1",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     fontSize: 18,
     marginTop: 15,
   },
   header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     padding: 20,
-    backgroundColor: '#191A1F',
+    backgroundColor: "#191A1F",
   },
   content: {
     padding: 20,
   },
   appealSection: {
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     borderRadius: 8,
     padding: 15,
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
@@ -153,18 +166,18 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   appealItem: {
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     borderRadius: 8,
     padding: 15,
     marginBottom: 10,
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
   },
   appealIndicator: {
     width: 10,
     height: 10,
     borderRadius: 5,
-    backgroundColor: 'green',
+    backgroundColor: "green",
     marginRight: 10,
   },
   appealInfo: {
@@ -172,35 +185,35 @@ const styles = StyleSheet.create({
   },
   appealTitle: {
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 5,
   },
   appealId: {
     fontSize: 12,
-    color: '#555',
+    color: "#555",
   },
   fileAppealButton: {
-    backgroundColor: '#000',
+    backgroundColor: "#000",
     borderRadius: 20,
     paddingVertical: 8,
     paddingHorizontal: 15,
-    alignSelf: 'flex-start',
+    alignSelf: "flex-start",
   },
   fileAppealButtonText: {
-    color: '#fff',
+    color: "#fff",
     fontSize: 12,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   actionItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    backgroundColor: '#fff',
-    borderColor: '#555',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    backgroundColor: "#fff",
+    borderColor: "#555",
     borderRadius: 8,
     padding: 15,
     marginBottom: 10,
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
@@ -208,8 +221,8 @@ const styles = StyleSheet.create({
   },
   actionItemText: {
     fontSize: 16,
-    fontWeight: 'bold',
-    color: '#000',
+    fontWeight: "bold",
+    color: "#000",
   },
 });
 
