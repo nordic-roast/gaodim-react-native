@@ -1,53 +1,74 @@
 // MainApp.jsx
-import React, { useState, useEffect } from "react";
+import React, { createContext, useState, useEffect } from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import SplashScreen from "../views/SplashScreen";
-import LoginScreen from "../views/LoginScreen";
-import RegisterScreen from "../views/RegisterScreen";
+import LoginScreen from '../views/LoginScreen';
+import RegistrationScreen from '../views/RegisterScreen';
 import HomeScreen from "../views/HomeScreen";
 import ImageSelect from "../views/ImageSelect";
 import HistoryScreen from "../views/HistoryScreen";
-import AppealScreen from "../views/AppealScreen";
-
+import { Ionicons } from '@expo/vector-icons';
 import { auth } from "../firebaseConfig";
 import { onAuthStateChanged } from "firebase/auth";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
-// Component to hold the bottom tabs
 const BottomTabNavigator = () => {
-  const [userLoggedIn, setUserLoggedIn] = useState(false);
+  // const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(null);
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        setUserLoggedIn(true);
+        setIsLoggedIn(true);
       } else {
-        setUserLoggedIn(false);
+        setIsLoggedIn(false);
       }
     });
   }, []);
 
-  if (userLoggedIn) {
-    return (
-      <Tab.Navigator>
-        <Tab.Screen name="Home" component={HomeScreen} />
-        <Tab.Screen name="Image" component={ImageSelect} />
-        <Tab.Screen name="History" component={HistoryScreen} />
-      </Tab.Navigator>
-    );
-  } else {
-    return (
-      <Tab.Navigator>
-        <Tab.Screen name="Image" component={ImageSelect} />
-      </Tab.Navigator>
-    );
-  }
+
+  return (
+    <Tab.Navigator
+      initialRouteName="Splash"
+      screenOptions={({ route }) => ({
+        headerShown: false,
+        tabBarIcon: ({ focused, color, size }) => {
+          let iconName;
+          if (route.name === 'Home') {
+            iconName = focused ? 'home' : 'home-outline';
+          } else if (route.name === 'Camera') {
+            iconName = focused ? 'camera' : 'camera-outline';
+          } else if (route.name === 'History') {
+            iconName = focused ? 'time' : 'time-outline';
+          }
+          return <Ionicons name={iconName} size={size} color={color} />;
+        },
+        tabBarActiveTintColor: 'tomato',
+        tabBarInactiveTintColor: 'gray',
+      })}
+    >
+      {isLoggedIn ? (
+        <>
+          {/* Logged in */}
+          <Tab.Screen name="Home" component={HomeScreen} />
+          <Tab.Screen name="Camera" component={ImageSelect} />
+          <Tab.Screen name="History" component={HistoryScreen} />
+        </>
+      ) : (
+        <>
+          {/* Not logged in */}
+          <Tab.Screen name="Home" component={HomeScreen} />
+          <Tab.Screen name="Camera" component={ImageSelect} />
+        </>
+      )}
+    </Tab.Navigator>
+  );
+>>>>>>> bb213c825c52f02638190e962edb17f0c4506fb4
 };
 
-// Main App Component
 const MainApp = () => {
   return (
     <Stack.Navigator initialRouteName="Appeal">
@@ -63,20 +84,10 @@ const MainApp = () => {
       />
       <Stack.Screen
         name="Register"
-        component={RegisterScreen}
+        component={RegistrationScreen}
         options={{ headerShown: false }}
       />
-      <Stack.Screen
-        name="Home"
-        component={HomeScreen}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="Appeal"
-        component={AppealScreen}
-        options={{ headerShown: false }}
-      />
-      {/* The main tab navigator becomes a screen in the stack navigator */}
+      {/* Once logged in, the Main tab navigator is active */}
       <Stack.Screen
         name="Main"
         component={BottomTabNavigator}

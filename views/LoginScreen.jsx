@@ -19,12 +19,11 @@ const LoginScreen = ({ navigation }) => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleLogin = () => {
-    setIsLoading(true);
+  const handleLogin = () => { 
     signInWithEmailAndPassword(auth, email, password).then(() => {
       navigation.navigate("Main");
     });
-  };
+  }; 
 
   return (
     <View style={styles.container}>
