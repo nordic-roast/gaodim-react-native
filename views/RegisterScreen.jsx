@@ -22,9 +22,15 @@ const RegisterScreen = ({ navigation }) => {
 
   const handleRegister = () => {
     setIsLoading(true);
-    createUserWithEmailAndPassword(auth, email, password).then(() => {
-      navigation.navigate("Login");
-    });
+    createUserWithEmailAndPassword(auth, email, password)
+      .then(() => {
+        setIsLoading(false);
+        navigation.navigate("Login");
+      })
+      .catch((error) => {
+        console.log(error);
+        setIsLoading(false);
+      });
   };
 
   return (

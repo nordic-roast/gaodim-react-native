@@ -59,38 +59,42 @@ export default function ImageSelect() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.buttonText}>Image Preview</Text>
-      <Image
-        source={
-          selectedImage
-            ? { uri: selectedImage }
-            : require("../assets/placeholder.png")
-        }
-        style={{ width: "75%", height: "75%" }}
-      />
-      <TouchableOpacity
-        style={styles.primaryButton} 
-        onPress={() => pickImage("camera")}
-      >
-        <Text style={styles.buttonText}>Take picture of your ticket</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.secondaryButton}
-        onPress={() => pickImage("gallery")}
-      >
-        <Text style={styles.buttonText}>Upload image from gallery</Text>
-      </TouchableOpacity>
-      {selectedImage ? (
-        <TouchableOpacity
-          title="Confirm image"
-          onPress={async () => await uploadImage(selectedImage, navigation)}
+      <View style={{ flex: 2, width: "100%", alignItems: "center" }}>
+        <Text style={styles.buttonText}>Image Preview</Text>
+        <Image
+          source={
+            selectedImage
+              ? { uri: selectedImage }
+              : require("../assets/placeholder.png")
+          }
+          style={{ width: "100%", height: "100%" }}
         />
-      ) : null}
+      </View>
+      <View style={{ flex: 1, width: "100%", justifyContent: "space-evenly" }}>
+        <TouchableOpacity
+          style={styles.primaryButton}
+          onPress={() => pickImage("camera")}
+        >
+          <Text style={styles.buttonText}>Take picture of your ticket</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.secondaryButton}
+          onPress={() => pickImage("gallery")}
+        >
+          <Text style={styles.buttonText}>Upload image from gallery</Text>
+        </TouchableOpacity>
+        {selectedImage ? (
+          <TouchableOpacity
+            style={styles.secondaryButton}
+            onPress={async () => await uploadImage(selectedImage, navigation)}
+          >
+            <Text style={styles.buttonText}>Confirm image</Text>
+          </TouchableOpacity>
+        ) : null}
+      </View>
     </View>
   );
 }
-
-
 
 const styles = StyleSheet.create({
   container: {
@@ -98,7 +102,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     flex: 1,
-    backgroundColor: '#191A1F',
+    backgroundColor: "#191A1F",
   },
   primaryButton: {
     backgroundColor: "#35C2C1",
@@ -119,9 +123,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   buttonText: {
-    color: '#fff',
+    color: "#fff",
     fontSize: 12,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   image: {
     width: "75%",
