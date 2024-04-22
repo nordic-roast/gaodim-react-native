@@ -3,12 +3,12 @@ import React, { createContext, useState, useEffect } from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import SplashScreen from "../views/SplashScreen";
-import LoginScreen from '../views/LoginScreen';
-import RegistrationScreen from '../views/RegisterScreen';
+import LoginScreen from "../views/LoginScreen";
+import RegistrationScreen from "../views/RegisterScreen";
 import HomeScreen from "../views/HomeScreen";
 import ImageSelect from "../views/ImageSelect";
 import HistoryScreen from "../views/HistoryScreen";
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons } from "@expo/vector-icons";
 import { auth } from "../firebaseConfig";
 import { onAuthStateChanged } from "firebase/auth";
 
@@ -29,7 +29,6 @@ const BottomTabNavigator = () => {
     });
   }, []);
 
-
   return (
     <Tab.Navigator
       initialRouteName="Splash"
@@ -37,17 +36,17 @@ const BottomTabNavigator = () => {
         headerShown: false,
         tabBarIcon: ({ focused, color, size }) => {
           let iconName;
-          if (route.name === 'Home') {
-            iconName = focused ? 'home' : 'home-outline';
-          } else if (route.name === 'Camera') {
-            iconName = focused ? 'camera' : 'camera-outline';
-          } else if (route.name === 'History') {
-            iconName = focused ? 'time' : 'time-outline';
+          if (route.name === "Home") {
+            iconName = focused ? "home" : "home-outline";
+          } else if (route.name === "Camera") {
+            iconName = focused ? "camera" : "camera-outline";
+          } else if (route.name === "History") {
+            iconName = focused ? "time" : "time-outline";
           }
           return <Ionicons name={iconName} size={size} color={color} />;
         },
-        tabBarActiveTintColor: 'tomato',
-        tabBarInactiveTintColor: 'gray',
+        tabBarActiveTintColor: "tomato",
+        tabBarInactiveTintColor: "gray",
       })}
     >
       {isLoggedIn ? (
@@ -65,7 +64,7 @@ const BottomTabNavigator = () => {
         </>
       )}
     </Tab.Navigator>
-  ); 
+  );
 };
 
 const MainApp = () => {

@@ -19,11 +19,18 @@ const LoginScreen = ({ navigation }) => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleLogin = () => { 
-    signInWithEmailAndPassword(auth, email, password).then(() => {
-      navigation.navigate("Main");
-    });
-  }; 
+  function handleLogin() {
+    setIsLoading(true);
+    signInWithEmailAndPassword(auth, email, password)
+      .then(() => {
+        setIsLoading(false);
+        navigation.navigate("Main");
+      })
+      .catch((error) => {
+        console.log(error);
+        setIsLoading(false);
+      });
+  }
 
   return (
     <View style={styles.container}>
