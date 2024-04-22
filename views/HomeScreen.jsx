@@ -1,18 +1,12 @@
 import React, { useState, useEffect } from "react";
-import {
-  View,
-  Text,
-  Image,
-  TouchableOpacity, 
-  StyleSheet,
-} from "react-native";
+import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { auth } from "../firebaseConfig";
-import { signOut, onAuthStateChanged } from "firebase/auth"; 
+import { signOut, onAuthStateChanged } from "firebase/auth";
 import LetterModal from "./LetterModal";
 import { firestore } from "../firebaseConfig";
-import { collection, query, orderBy, limit, getDocs } from "firebase/firestore"; 
-import { SafeAreaView } from "react-native-safe-area-context"; 
+import { collection, query, orderBy, limit, getDocs } from "firebase/firestore";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const HomeScreen = ({ navigation }) => {
   const [userEmail, setUserEmail] = useState("");
@@ -23,9 +17,13 @@ const HomeScreen = ({ navigation }) => {
   // Get tickets for user
   let docsSnap;
 
-  async function fetchLatestTicket(userId) { 
+  async function fetchLatestTicket(userId) {
     try {
-      const q = query(collection(firestore, userId), orderBy("date", "desc"), limit(1));
+      const q = query(
+        collection(firestore, userId),
+        orderBy("date", "desc"),
+        limit(1)
+      );
       docsSnap = await getDocs(q);
       let ticketList = [];
       docsSnap.forEach((doc) => {
@@ -33,11 +31,10 @@ const HomeScreen = ({ navigation }) => {
         console.log(ticketList);
       });
       setTickets(ticketList);
-    }
-    catch (e) {
+    } catch (e) {
       console.error(e);
     }
-  };
+  }
 
   function handleLogout() {
     signOut(auth).then(() => {
@@ -46,13 +43,12 @@ const HomeScreen = ({ navigation }) => {
     });
   }
 
-
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
         setUserEmail(user.email);
-        setIsLoggedIn(true); 
-        fetchLatestTicket(user.uid); 
+        setIsLoggedIn(true);
+        fetchLatestTicket(user.uid);
       } else {
         setUserEmail("");
         setIsLoggedIn(false);
@@ -67,9 +63,13 @@ const HomeScreen = ({ navigation }) => {
         <>
           {/* Header */}
           <View style={styles.header}>
-            {/* Profile Icon */} 
-            <TouchableOpacity style={styles.hideButton}
-              onPress={() => {/* Navigate to profile */ }}>
+            {/* Profile Icon */}
+            <TouchableOpacity
+              style={styles.hideButton}
+              onPress={() => {
+                /* Navigate to profile */
+              }}
+            >
               <Ionicons name="person-circle" size={30} color="white" />
             </TouchableOpacity>
 
@@ -89,43 +89,62 @@ const HomeScreen = ({ navigation }) => {
 
           {/* Main content */}
           <View style={styles.content}>
-            {/* Appeals Section */} 
+            {/* Appeals Section */}
             {tickets.length != 0 ? (
               tickets.map((ticket, i) => {
-                <View style={styles.content}>
-                  {/* Latest Ticket Section */}
-                  <View style={styles.appealSection}>
-                    <Text style={styles.appealsHeader}>Latest Ticket</Text>
-                      <TouchableOpacity onPress={() => {/* Navigate to ticket details */ }} style={styles.appealItem}>
+                return (
+                  <View style={styles.content}>
+                    {/* Latest Ticket Section */}
+                    <View style={styles.appealSection}>
+                      <Text style={styles.appealsHeader}>Latest Ticket</Text>
+                      <TouchableOpacity
+                        onPress={() => {
+                          /* Navigate to ticket details */
+                        }}
+                        style={styles.appealItem}
+                      >
                         <View style={styles.appealIndicator} />
                         <View style={styles.appealInfo}>
-                          <Text style={styles.appealTitle}>{ticket["reason"]}</Text>
+                          <Text style={styles.appealTitle}>
+                            {ticket["reason"]}
+                          </Text>
                           <Text style={styles.appealId}>#123</Text>
                         </View>
-                        <TouchableOpacity onPress={() => {/* Handle view more */ }} style={styles.fileAppealButton}>
-                          <Text style={styles.fileAppealButtonText}>View more</Text>
+                        <TouchableOpacity
+                          onPress={() => {
+                            /* Handle view more */
+                          }}
+                          style={styles.fileAppealButton}
+                        >
+                          <Text style={styles.fileAppealButtonText}>
+                            View more
+                          </Text>
                         </TouchableOpacity>
-                      </TouchableOpacity> 
-                      <Text style={styles.guestText}>No tickets found.</Text> 
+                      </TouchableOpacity>
+                    </View>
                   </View>
-                </View>
+                );
               })
-            ): (
+            ) : (
               <Text> no tickets found</Text>
             )}
 
             {/* More Actions Section */}
             <View style={styles.actionsSection}>
-              <TouchableOpacity onPress={() => navigation.navigate("Camera")}
-                style={styles.actionItem}>
+              <TouchableOpacity
+                onPress={() => navigation.navigate("Camera")}
+                style={styles.actionItem}
+              >
                 <Text style={styles.actionItemText}>Add new appeal</Text>
                 <Ionicons name="add-circle-outline" size={24} color="black" />
               </TouchableOpacity>
-              <TouchableOpacity onPress={() => navigation.navigate("History")}
-                style={styles.actionItem}>
+              <TouchableOpacity
+                onPress={() => navigation.navigate("History")}
+                style={styles.actionItem}
+              >
                 <Text style={styles.actionItemText}>Appeal history</Text>
                 <Ionicons name="time-outline" size={24} color="black" />
-              </TouchableOpacity> 
+              </TouchableOpacity>
             </View>
           </View>
         </>
@@ -219,8 +238,8 @@ const styles = StyleSheet.create({
   },
   fileAppealButtonText: {
     color: "#fff",
-    fontSize: 12, 
-    fontWeight: "bold", 
+    fontSize: 12,
+    fontWeight: "bold",
   },
   actionItem: {
     flexDirection: "row",
