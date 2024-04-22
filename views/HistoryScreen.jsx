@@ -8,14 +8,12 @@ import {
 } from "react-native";
 import LoadingModal from "./LoadingModal";
 import LetterModal from "./LetterModal";
-
 import { onAuthStateChanged } from "@firebase/auth";
-import { auth } from "../firebaseConfig";
-
+import { auth } from "../firebaseConfig"; 
 import { firestore } from "../firebaseConfig";
 import {
   collection,
-  getDocs,
+  getDocs, 
   query,
   orderBy,
   limit,
@@ -80,48 +78,43 @@ const HistoryScreen = ({ navigation }) => {
       >
         {tickets.length != 0 ? (
           tickets.map((ticket, i) => {
-            return (
-              <View
-                style={{
-                  backgroundColor: "skyblue",
-                  flexDirection: "row",
-                  marginBottom: "5%",
-                  padding: "2%",
-                  borderRadius: 20,
-                }}
-                key={i}
-              >
-                <View style={{ flex: 1 }}>
-                  <Text>{i + 1}</Text>
-                </View>
-                <View style={{ flex: 4 }}>
-                  <Text style={{ fontWeight: "bold" }}>
-                    Date of submission:{" "}
-                  </Text>
-                  <Text>{ticket["date"]}</Text>
-                  <Text style={{ fontWeight: "bold" }}>Link to ticket: </Text>
-                  <Text>{ticket["url"]}</Text>
-                  <Text style={{ fontWeight: "bold" }}>Letter preview: </Text>
-                  <Text>{ticket["letter"].substring(0, 50)}</Text>
-                  <Text style={{ fontWeight: "bold" }}>Reason provided: </Text>
-                  <Text>{ticket["reason"]}</Text>
-                </View>
-                <View style={{ flex: 1, justifyContent: "center" }}>
-                  <TouchableOpacity
-                    style={{ backgroundColor: "white", borderRadius: 20 }}
-                  >
-                    <Text
-                      onPress={() => {
-                        setSelectedText(ticket["letter"]);
-                        setModalVisible(true);
+            return ( 
+                <View style={styles.content} 
+                      key={i}
+                >
+                    {/* Latest Ticket Section */}
+                    <View style={styles.appealSection}> 
+                      <TouchableOpacity
+                        onPress={() => {
+                          /* Navigate to ticket details */
+                        }}
+                        style={styles.appealItem}
+                      >
+                        <View style={styles.appealIndicator} />
+                        <View style={styles.appealInfo}>
+                          <Text style={styles.appealTitle}>
+                            Appeal reason: {ticket["reason"]}
+                          </Text>
+                          <Text style={styles.appealId}>{ticket["date"]}</Text>
+                        </View>
+                        <TouchableOpacity
+                          onPress={() => {
+                            /* Handle view more */
+                          }}
+                          style={styles.fileAppealButton}
+                        >
+                          <Text    
+                            onPress={() => {
+                           setSelectedText(ticket["letter"]);
+                           setModalVisible(true);
                       }}
-                      style={{ textAlign: "center" }}
-                    >
-                      View Letter
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
+                      style={styles.fileAppealButtonText}>
+                            View more
+                          </Text>
+                        </TouchableOpacity>
+                      </TouchableOpacity>
+                    </View>
+                  </View> 
             );
           })
         ) : (

@@ -3,6 +3,7 @@ import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { auth } from "../firebaseConfig";
 import { signOut, onAuthStateChanged } from "firebase/auth";
+import LoadingModal from "./LoadingModal";
 import LetterModal from "./LetterModal";
 import { firestore } from "../firebaseConfig";
 import { collection, query, orderBy, limit, getDocs } from "firebase/firestore";
@@ -12,7 +13,10 @@ const HomeScreen = ({ navigation }) => {
   const [userEmail, setUserEmail] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [latestTicket, setLatestTicket] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [selectedText, setSelectedText] = useState("");
   const [tickets, setTickets] = useState([]);
+  const [modalVisible, setModalVisible] = useState(false);
 
   // Get tickets for user
   let docsSnap;
@@ -27,8 +31,7 @@ const HomeScreen = ({ navigation }) => {
       docsSnap = await getDocs(q);
       let ticketList = [];
       docsSnap.forEach((doc) => {
-        ticketList.push(doc.data());
-        console.log(ticketList);
+        ticketList.push(doc.data()); 
       });
       setTickets(ticketList);
     } catch (e) {
@@ -37,8 +40,7 @@ const HomeScreen = ({ navigation }) => {
   }
 
   function handleLogout() {
-    signOut(auth).then(() => {
-      console.log("signout successful");
+    signOut(auth).then(() => { 
       navigation.navigate("Splash");
     });
   }
@@ -60,7 +62,15 @@ const HomeScreen = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.container}>
       {isLoggedIn ? (
-        <>
+        <> 
+          <LoadingModal isLoading={isLoading}></LoadingModal>
+          <LetterModal
+            navigation={navigation}
+            text={selectedText}
+            modalVisible={modalVisible}
+            setModalVisible={setModalVisible}
+            needChanging={false}
+          />
           {/* Header */}
           <View style={styles.header}>
             {/* Profile Icon */}
@@ -93,7 +103,7 @@ const HomeScreen = ({ navigation }) => {
             {tickets.length != 0 ? (
               tickets.map((ticket, i) => {
                 return (
-                  <View style={styles.content}>
+                  <View style={styles.content} key={i} >
                     {/* Latest Ticket Section */}
                     <View style={styles.appealSection}>
                       <Text style={styles.appealsHeader}>Latest Ticket</Text>
@@ -106,9 +116,9 @@ const HomeScreen = ({ navigation }) => {
                         <View style={styles.appealIndicator} />
                         <View style={styles.appealInfo}>
                           <Text style={styles.appealTitle}>
-                            {ticket["reason"]}
+                            Appeal reason: {ticket["reason"]}
                           </Text>
-                          <Text style={styles.appealId}>#123</Text>
+                          <Text style={styles.appealId}>{ticket["date"]}</Text>
                         </View>
                         <TouchableOpacity
                           onPress={() => {
@@ -116,7 +126,12 @@ const HomeScreen = ({ navigation }) => {
                           }}
                           style={styles.fileAppealButton}
                         >
-                          <Text style={styles.fileAppealButtonText}>
+                          <Text    
+                            onPress={() => {
+                           setSelectedText(ticket["letter"]);
+                           setModalVisible(true);
+                      }}
+                      style={styles.fileAppealButtonText}>
                             View more
                           </Text>
                         </TouchableOpacity>

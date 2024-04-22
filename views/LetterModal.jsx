@@ -40,8 +40,7 @@ function LetterModal({
         >
           <TouchableOpacity
             style={[styles.closeButtonContainer]}
-            onPress={() => {
-              console.log(">>>>>> close");
+            onPress={() => { 
               setModalVisible(!modalVisible);
               navigation.navigate("Main");
             }}
