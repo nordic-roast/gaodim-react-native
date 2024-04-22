@@ -64,7 +64,7 @@ export default function ImageSelect() {
         source={
           selectedImage
             ? { uri: selectedImage }
-            : require("../assets/image.png")
+            : require("../assets/placeholder.png")
         }
         style={{ width: "75%", height: "75%" }}
       />
@@ -75,7 +75,7 @@ export default function ImageSelect() {
         <Text style={styles.buttonText}>Take picture of your ticket</Text>
       </TouchableOpacity>
       <TouchableOpacity
-        style={styles.primaryButton}
+        style={styles.secondaryButton}
         onPress={() => pickImage("gallery")}
       >
         <Text style={styles.buttonText}>Upload image from gallery</Text>
@@ -101,6 +101,15 @@ const styles = StyleSheet.create({
     backgroundColor: '#191A1F',
   },
   primaryButton: {
+    backgroundColor: "#35C2C1",
+    color: "#ffffff",
+    width: "100%",
+    padding: 15,
+    marginVertical: 5,
+    borderRadius: 5,
+    alignItems: "center",
+  },
+  secondaryButton: {
     backgroundColor: "#1E232C",
     color: "#ffffff",
     width: "100%",
