@@ -185,10 +185,7 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 12,
     fontWeight: 'bold',
-  },
-  actionsSection: {
-    // Additional styles if necessary
-  },
+  }, 
   actionItem: {
     flexDirection: 'row',
     alignItems: 'center',

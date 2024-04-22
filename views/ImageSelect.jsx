@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, Button, Image, StyleSheet } from "react-native";
+import { View, Text, TouchableOpacity, Image, StyleSheet } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import "react-native-get-random-values";
 import { v4 as uuidv4 } from "uuid";
@@ -58,8 +58,8 @@ export default function ImageSelect() {
   }
 
   return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      <Text>Image Preview</Text>
+    <View style={styles.container}>
+      <Text style={styles.buttonText}>Image Preview</Text>
       <Image
         source={
           selectedImage
@@ -68,21 +68,54 @@ export default function ImageSelect() {
         }
         style={{ width: "75%", height: "75%" }}
       />
-      <Button
-        title="Take picture of your ticket"
+      <TouchableOpacity
+        style={styles.primaryButton} 
         onPress={() => pickImage("camera")}
-      />
-      <Button
-        title="Upload image from gallery"
+      >
+        <Text style={styles.buttonText}>Take picture of your ticket</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.primaryButton}
         onPress={() => pickImage("gallery")}
-      />
+      >
+        <Text style={styles.buttonText}>Upload image from gallery</Text>
+      </TouchableOpacity>
       {selectedImage ? (
-        <Button
+        <TouchableOpacity
           title="Confirm image"
           onPress={async () => await uploadImage(selectedImage, navigation)}
         />
       ) : null}
     </View>
   );
-  
 }
+
+
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    flex: 1,
+    backgroundColor: '#191A1F',
+  },
+  primaryButton: {
+    backgroundColor: "#1E232C",
+    color: "#ffffff",
+    width: "100%",
+    padding: 15,
+    marginVertical: 5,
+    borderRadius: 5,
+    alignItems: "center",
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 12,
+    fontWeight: 'bold',
+  },
+  image: {
+    width: "75%",
+    height: "75%",
+  },
+});
