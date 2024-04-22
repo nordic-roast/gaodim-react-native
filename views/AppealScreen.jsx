@@ -21,6 +21,8 @@ import { auth } from "../firebaseConfig";
 import LoadingModal from "./LoadingModal";
 import LetterModal from "./LetterModal";
 
+import { SafeAreaView } from "react-native-safe-area-context";
+
 // Creating ticket once chatGPT response is produced
 
 function removeBase64Prefix(base64String) {
@@ -115,7 +117,7 @@ export default function AppealScreen({ navigation }) {
 
   // UI rendering
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <View style={styles.inputContainer}>
         <Text style={styles.screenTitle}>
           Under what grounds do you want to contest the ticket?
@@ -176,7 +178,7 @@ export default function AppealScreen({ navigation }) {
         setModalVisible={setModalVisible}
         needChanging={true}
       ></LetterModal>
-    </View>
+    </SafeAreaView>
   );
 }
 const styles = StyleSheet.create({

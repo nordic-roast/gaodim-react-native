@@ -5,6 +5,7 @@ import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
 import { onAuthStateChanged } from "firebase/auth";
 
 import { auth } from "../firebaseConfig";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const SplashScreen = ({ navigation }) => {
   const [loggedInUser, setLoggedInUser] = useState(null);
@@ -20,7 +21,7 @@ const SplashScreen = ({ navigation }) => {
   }, []);
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <View style={styles.logoContainer}>
         <Image source={require("../assets/image.png")} style={styles.logo} />
       </View>
@@ -41,7 +42,7 @@ const SplashScreen = ({ navigation }) => {
       <TouchableOpacity onPress={() => navigation.navigate("Main")}>
         <Text style={styles.guestText}>Continue as a guest</Text>
       </TouchableOpacity>
-    </View>
+    </SafeAreaView>
   );
 };
 

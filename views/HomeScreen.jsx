@@ -1,11 +1,19 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, Image, TouchableOpacity, ScrollView, StyleSheet } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import {
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  ScrollView,
+  StyleSheet,
+} from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 import { auth } from "../firebaseConfig";
-import { signOut, onAuthStateChanged } from "firebase/auth";
+import { signOut, onAuthStateChanged } from "firebase/auth"; 
 import LetterModal from "./LetterModal";
 import { firestore } from "../firebaseConfig";
-import { collection, query, orderBy, limit, getDocs } from "firebase/firestore";
+import { collection, query, orderBy, limit, getDocs } from "firebase/firestore"; 
+import { SafeAreaView } from "react-native-safe-area-context"; 
 
 const HomeScreen = ({ navigation }) => {
   const [userEmail, setUserEmail] = useState("");
@@ -16,13 +24,12 @@ const HomeScreen = ({ navigation }) => {
   // Get tickets for user
   let docsSnap;
 
-
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
         setUserEmail(user.email);
-        setIsLoggedIn(true);
-        fetchLatestTicket(user.uid);
+        setIsLoggedIn(true); 
+        fetchLatestTicket(user.uid); 
       } else {
         setUserEmail("");
         setIsLoggedIn(false);
@@ -55,35 +62,34 @@ const HomeScreen = ({ navigation }) => {
   }
 
   return (
-    <ScrollView style={styles.container}>
+    <SafeAreaView style={styles.container}>
       {isLoggedIn ? (
         <>
           {/* Header */}
           <View style={styles.header}>
-
-            {/* Profile Icon */}
+            {/* Profile Icon */} 
             <TouchableOpacity style={styles.hideButton}
               onPress={() => {/* Navigate to profile */ }}>
               <Ionicons name="person-circle" size={30} color="white" />
             </TouchableOpacity>
 
             {/* Logout Text replaced with Logout Icon */}
-            <TouchableOpacity onPress={
-              userEmail != ""
-                ? handleLogout
-                : () => {
-                  navigation.navigate("Splash");
-                }
-            }>
+            <TouchableOpacity
+              onPress={
+                userEmail != ""
+                  ? handleLogout
+                  : () => {
+                      navigation.navigate("Splash");
+                    }
+              }
+            >
               <Ionicons name="exit-outline" size={30} color="white" />
             </TouchableOpacity>
           </View>
 
-
           {/* Main content */}
           <View style={styles.content}>
-
-            {/* Appeals Section */}
+            {/* Appeals Section */} 
             {tickets.length != 0 ? (
               tickets.map((ticket, i) => {
                 <View style={styles.content}>
@@ -122,8 +128,7 @@ const HomeScreen = ({ navigation }) => {
                 style={styles.actionItem}>
                 <Text style={styles.actionItemText}>Appeal history</Text>
                 <Ionicons name="time-outline" size={24} color="black" />
-              </TouchableOpacity>
-
+              </TouchableOpacity> 
             </View>
           </View>
         </>
@@ -135,45 +140,46 @@ const HomeScreen = ({ navigation }) => {
             <TouchableOpacity>
               <Text
                 onPress={() => navigation.navigate("Login")}
-                style={styles.guestText}>
+                style={styles.guestText}
+              >
                 Please log in to view this content.
               </Text>
             </TouchableOpacity>
           </View>
         </>
       )}
-    </ScrollView>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#191A1F',
+    backgroundColor: "#191A1F",
   },
   guestText: {
-    color: '#35C2C1',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    color: "#35C2C1",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     fontSize: 18,
     marginTop: 15,
   },
   header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     padding: 20,
-    backgroundColor: '#191A1F',
+    backgroundColor: "#191A1F",
   },
   content: {
     padding: 20,
   },
   appealSection: {
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     borderRadius: 8,
     padding: 15,
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
@@ -181,18 +187,18 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   appealItem: {
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     borderRadius: 8,
     padding: 15,
     marginBottom: 10,
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
   },
   appealIndicator: {
     width: 10,
     height: 10,
     borderRadius: 5,
-    backgroundColor: 'green',
+    backgroundColor: "green",
     marginRight: 10,
   },
   appealInfo: {
@@ -200,35 +206,35 @@ const styles = StyleSheet.create({
   },
   appealTitle: {
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 5,
   },
   appealId: {
     fontSize: 12,
-    color: '#555',
+    color: "#555",
   },
   fileAppealButton: {
-    backgroundColor: '#000',
+    backgroundColor: "#000",
     borderRadius: 20,
     paddingVertical: 8,
     paddingHorizontal: 15,
-    alignSelf: 'flex-start',
+    alignSelf: "flex-start",
   },
   fileAppealButtonText: {
-    color: '#fff',
-    fontSize: 12,
-    fontWeight: 'bold',
+    color: "#fff",
+    fontSize: 12, 
+    fontWeight: "bold", 
   },
   actionItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    backgroundColor: '#fff',
-    borderColor: '#555', // Slightly lighter border for definition
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    backgroundColor: "#fff",
+    borderColor: "#555", // Slightly lighter border for definition
     borderRadius: 8,
     padding: 15,
     marginBottom: 10,
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
@@ -236,11 +242,11 @@ const styles = StyleSheet.create({
   },
   actionItemText: {
     fontSize: 16,
-    fontWeight: 'bold',
-    color: '#000',
+    fontWeight: "bold",
+    color: "#000",
   },
   hideButton: {
-    opacity: '0',
+    opacity: "0",
   },
   // Additional styles for other components as needed
 });

@@ -21,6 +21,7 @@ import {
   limit,
 } from "@firebase/firestore";
 import { set } from "firebase/database";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const HistoryScreen = ({ navigation }) => {
   const [userEmail, setUserEmail] = useState("");
@@ -58,7 +59,7 @@ const HistoryScreen = ({ navigation }) => {
   }, []);
 
   return (
-    <ScrollView style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Text>
         {userEmail.substring(0, userEmail.indexOf("@"))}, here are your GaoDim
         tickets so far:
@@ -127,7 +128,7 @@ const HistoryScreen = ({ navigation }) => {
           <Text>You have not submitted any tickets to GaoDim!</Text>
         )}
       </ScrollView>
-    </ScrollView>
+    </SafeAreaView>
   );
 };
 
