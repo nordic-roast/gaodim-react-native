@@ -16,7 +16,6 @@ const HistoryScreen = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   // Get tickets for user
-
   let docsSnap;
 
   async function getTickets(userId) {
@@ -90,7 +89,7 @@ const HistoryScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {
+  container: { 
     flex: 1,
     backgroundColor: '#191A1F',
   },
