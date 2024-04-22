@@ -36,7 +36,8 @@ const HomeScreen = ({ navigation }) => {
           <View style={styles.header}>
 
             {/* Profile Icon */}
-            <TouchableOpacity onPress={() => {/* Navigate to profile */ }}>
+            <TouchableOpacity style={styles.hideButton} 
+                              onPress={() => {/* Navigate to profile */ }}>
               <Ionicons name="person-circle" size={30} color="white" />
             </TouchableOpacity>
 
@@ -74,22 +75,16 @@ const HomeScreen = ({ navigation }) => {
 
             {/* More Actions Section */}
             <View style={styles.actionsSection}>
-
-              <TouchableOpacity onPress={() => {/* Navigate to add new appeal */ }} style={styles.actionItem}>
+              <TouchableOpacity onPress={() =>  navigation.navigate("Camera")} 
+                                style={styles.actionItem}>
                 <Text style={styles.actionItemText}>Add new appeal</Text>
                 <Ionicons name="add-circle-outline" size={24} color="black" />
               </TouchableOpacity>
-
-              <TouchableOpacity onPress={() => {/* Navigate to appeal history */ }} style={styles.actionItem}>
+              <TouchableOpacity onPress={() =>  navigation.navigate("History")} 
+                                style={styles.actionItem}>
                 <Text style={styles.actionItemText}>Appeal history</Text>
                 <Ionicons name="time-outline" size={24} color="black" />
-              </TouchableOpacity>
-
-              <TouchableOpacity onPress={() => {/* Navigate to contact specialist */ }} style={styles.actionItem}>
-                <Text style={styles.actionItemText}>Contact specialist</Text>
-                <Ionicons name="call-outline" size={24} color="black" />
-              </TouchableOpacity>
-
+              </TouchableOpacity> 
 
             </View>
           </View>
@@ -206,8 +201,8 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#000',
   },
-  newAppealButton: {
-    // Specific styles for "Add new appeal" button
+  hideButton: {
+    opacity: '0',
   },
   // Additional styles for other components as needed
 });
