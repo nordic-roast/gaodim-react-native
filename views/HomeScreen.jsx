@@ -3,8 +3,7 @@ import {
   View,
   Text,
   Image,
-  TouchableOpacity,
-  ScrollView,
+  TouchableOpacity, 
   StyleSheet,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
@@ -24,28 +23,14 @@ const HomeScreen = ({ navigation }) => {
   // Get tickets for user
   let docsSnap;
 
-  useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        setUserEmail(user.email);
-        setIsLoggedIn(true); 
-        fetchLatestTicket(user.uid); 
-      } else {
-        setUserEmail("");
-        setIsLoggedIn(false);
-        setLatestTicket(null);
-      }
-    });
-  }, []);
-
-
-  async function fetchLatestTicket(userId) {
+  async function fetchLatestTicket(userId) { 
     try {
       const q = query(collection(firestore, userId), orderBy("date", "desc"), limit(1));
       docsSnap = await getDocs(q);
       let ticketList = [];
       docsSnap.forEach((doc) => {
         ticketList.push(doc.data());
+        console.log(ticketList);
       });
       setTickets(ticketList);
     }
@@ -60,6 +45,21 @@ const HomeScreen = ({ navigation }) => {
       navigation.navigate("Splash");
     });
   }
+
+
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUserEmail(user.email);
+        setIsLoggedIn(true); 
+        fetchLatestTicket(user.uid); 
+      } else {
+        setUserEmail("");
+        setIsLoggedIn(false);
+        setLatestTicket(null);
+      }
+    });
+  }, []);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -96,20 +96,17 @@ const HomeScreen = ({ navigation }) => {
                   {/* Latest Ticket Section */}
                   <View style={styles.appealSection}>
                     <Text style={styles.appealsHeader}>Latest Ticket</Text>
-                    {latestTicket ? (
                       <TouchableOpacity onPress={() => {/* Navigate to ticket details */ }} style={styles.appealItem}>
                         <View style={styles.appealIndicator} />
                         <View style={styles.appealInfo}>
-                          <Text style={styles.appealTitle}>{ticket["letter"].substring(0, 50)}</Text>
-                          <Text style={styles.appealId}></Text>
+                          <Text style={styles.appealTitle}>{ticket["reason"]}</Text>
+                          <Text style={styles.appealId}>#123</Text>
                         </View>
                         <TouchableOpacity onPress={() => {/* Handle view more */ }} style={styles.fileAppealButton}>
                           <Text style={styles.fileAppealButtonText}>View more</Text>
                         </TouchableOpacity>
-                      </TouchableOpacity>
-                    ) : (
-                      <Text style={styles.guestText}>No tickets found.</Text>
-                    )}
+                      </TouchableOpacity> 
+                      <Text style={styles.guestText}>No tickets found.</Text> 
                   </View>
                 </View>
               })
