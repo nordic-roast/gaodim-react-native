@@ -40,7 +40,7 @@ function LetterModal({
         >
           <TouchableOpacity
             style={[styles.closeButtonContainer]}
-            onPress={() => { 
+            onPress={() => {
               setModalVisible(!modalVisible);
               navigation.navigate("Main");
             }}
@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
   modalView: {
     padding: "5%",
     margin: "5%",
-    flex: 1,
+    height: "90%",
     backgroundColor: "#fff",
     justifyContent: "center",
     alignItems: "center",

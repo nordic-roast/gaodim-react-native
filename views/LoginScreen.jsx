@@ -149,12 +149,12 @@ const styles = StyleSheet.create({
   buttonText: {
     color: "#fff",
     fontSize: 18,
-    alignItems: "inline",
+    // alignItems: "inline",
   },
   registerText: {
     color: "#35C2C1",
     fontSize: 18,
-    alignItems: "inline",
+    // alignItems: "inline",
   },
   guestText: {
     color: "#35C2C1",

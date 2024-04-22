@@ -9,11 +9,11 @@ import {
 import LoadingModal from "./LoadingModal";
 import LetterModal from "./LetterModal";
 import { onAuthStateChanged } from "@firebase/auth";
-import { auth } from "../firebaseConfig"; 
+import { auth } from "../firebaseConfig";
 import { firestore } from "../firebaseConfig";
 import {
   collection,
-  getDocs, 
+  getDocs,
   query,
   orderBy,
   limit,
@@ -58,10 +58,6 @@ const HistoryScreen = ({ navigation }) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text>
-        {userEmail.substring(0, userEmail.indexOf("@"))}, here are your GaoDim
-        tickets so far:
-      </Text>
       <LoadingModal isLoading={isLoading}></LoadingModal>
       <LetterModal
         navigation={navigation}
@@ -78,43 +74,42 @@ const HistoryScreen = ({ navigation }) => {
       >
         {tickets.length != 0 ? (
           tickets.map((ticket, i) => {
-            return ( 
-                <View style={styles.content} 
-                      key={i}
-                >
-                    {/* Latest Ticket Section */}
-                    <View style={styles.appealSection}> 
-                      <TouchableOpacity
-                        onPress={() => {
-                          /* Navigate to ticket details */
-                        }}
-                        style={styles.appealItem}
-                      >
-                        <View style={styles.appealIndicator} />
-                        <View style={styles.appealInfo}>
-                          <Text style={styles.appealTitle}>
-                            Appeal reason: {ticket["reason"]}
-                          </Text>
-                          <Text style={styles.appealId}>{ticket["date"]}</Text>
-                        </View>
-                        <TouchableOpacity
-                          onPress={() => {
-                            /* Handle view more */
-                          }}
-                          style={styles.fileAppealButton}
-                        >
-                          <Text    
-                            onPress={() => {
-                           setSelectedText(ticket["letter"]);
-                           setModalVisible(true);
-                      }}
-                      style={styles.fileAppealButtonText}>
-                            View more
-                          </Text>
-                        </TouchableOpacity>
-                      </TouchableOpacity>
+            return (
+              <View style={styles.content} key={i}>
+                {/* Latest Ticket Section */}
+                <View style={styles.appealSection}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      /* Navigate to ticket details */
+                    }}
+                    style={styles.appealItem}
+                  >
+                    <View style={styles.appealIndicator} />
+                    <View style={styles.appealInfo}>
+                      <Text style={styles.appealTitle}>
+                        Appeal reason: {ticket["reason"]}
+                      </Text>
+                      <Text style={styles.appealId}>{ticket["date"]}</Text>
                     </View>
-                  </View> 
+                    <TouchableOpacity
+                      onPress={() => {
+                        /* Handle view more */
+                      }}
+                      style={styles.fileAppealButton}
+                    >
+                      <Text
+                        onPress={() => {
+                          setSelectedText(ticket["letter"]);
+                          setModalVisible(true);
+                        }}
+                        style={styles.fileAppealButtonText}
+                      >
+                        View more
+                      </Text>
+                    </TouchableOpacity>
+                  </TouchableOpacity>
+                </View>
+              </View>
             );
           })
         ) : (
@@ -129,6 +124,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#191A1F",
+    alignItems: "center",
   },
   guestText: {
     color: "#35C2C1",
