@@ -2,24 +2,37 @@ import React, { useState, useEffect } from "react";
 import { View, Text, Image, TouchableOpacity, ScrollView, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { auth } from "../firebaseConfig";
-import { signOut, onAuthStateChanged } from "firebase/auth"; 
+import { signOut, onAuthStateChanged } from "firebase/auth";
+import { firestore } from "../firebaseConfig";
+import { collection, query, orderBy, limit, getDocs } from "firebase/firestore";
 
 const HomeScreen = ({ navigation }) => {
   const [userEmail, setUserEmail] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [latestTicket, setLatestTicket] = useState(null);
 
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
         setUserEmail(user.email);
-        setIsLoggedIn(true); 
+        setIsLoggedIn(true);
+        fetchLatestTicket();
       } else {
         setUserEmail("");
         setIsLoggedIn(false);
+        setLatestTicket(null);
       }
     });
   }, []);
+
+
+  const fetchLatestTicket = async () => {
+    const q = query(collection(firestore, userId), orderBy("date", "desc"), limit(1));
+    const querySnapshot = await getDocs(q);
+    const data = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))[0];
+    setLatestTicket(data);
+  };
 
   function handleLogout() {
     signOut(auth).then(() => {
@@ -36,8 +49,8 @@ const HomeScreen = ({ navigation }) => {
           <View style={styles.header}>
 
             {/* Profile Icon */}
-            <TouchableOpacity style={styles.hideButton} 
-                              onPress={() => {/* Navigate to profile */ }}>
+            <TouchableOpacity style={styles.hideButton}
+              onPress={() => {/* Navigate to profile */ }}>
               <Ionicons name="person-circle" size={30} color="white" />
             </TouchableOpacity>
 
@@ -58,33 +71,39 @@ const HomeScreen = ({ navigation }) => {
           <View style={styles.content}>
 
             {/* Appeals Section */}
-            <View style={styles.appealSection}>
-              <Text style={styles.appealsHeader}>Latest ticket</Text>
-              <TouchableOpacity onPress={() => { }} style={styles.appealItem}>
-                <View style={styles.appealIndicator} />
-                <View style={styles.appealInfo}>
-                  <Text style={styles.appealTitle}>Ticket appeal #1</Text>
-                  <Text style={styles.appealId}>#LPP90</Text>
-                </View>
-                <TouchableOpacity onPress={() => { }} style={styles.fileAppealButton}>
-                  <Text style={styles.fileAppealButtonText}>View more</Text>
-                </TouchableOpacity>
-              </TouchableOpacity>
-              {/* Repeat the above TouchableOpacity for each appeal item */}
+            <View style={styles.content}>
+              {/* Latest Ticket Section */}
+              <View style={styles.appealSection}>
+                <Text style={styles.appealsHeader}>Latest Ticket</Text>
+                {latestTicket ? (
+                  <TouchableOpacity onPress={() => {/* Navigate to ticket details */ }} style={styles.appealItem}>
+                    <View style={styles.appealIndicator} />
+                    <View style={styles.appealInfo}>
+                      <Text style={styles.appealTitle}>{latestTicket.title}</Text>
+                      <Text style={styles.appealId}>{latestTicket.id}</Text>
+                    </View>
+                    <TouchableOpacity onPress={() => {/* Handle view more */ }} style={styles.fileAppealButton}>
+                      <Text style={styles.fileAppealButtonText}>View more</Text>
+                    </TouchableOpacity>
+                  </TouchableOpacity>
+                ) : (
+                  <Text>No tickets found.</Text>
+                )}
+              </View>
             </View>
 
             {/* More Actions Section */}
             <View style={styles.actionsSection}>
-              <TouchableOpacity onPress={() =>  navigation.navigate("Camera")} 
-                                style={styles.actionItem}>
+              <TouchableOpacity onPress={() => navigation.navigate("Camera")}
+                style={styles.actionItem}>
                 <Text style={styles.actionItemText}>Add new appeal</Text>
                 <Ionicons name="add-circle-outline" size={24} color="black" />
               </TouchableOpacity>
-              <TouchableOpacity onPress={() =>  navigation.navigate("History")} 
-                                style={styles.actionItem}>
+              <TouchableOpacity onPress={() => navigation.navigate("History")}
+                style={styles.actionItem}>
                 <Text style={styles.actionItemText}>Appeal history</Text>
                 <Ionicons name="time-outline" size={24} color="black" />
-              </TouchableOpacity> 
+              </TouchableOpacity>
 
             </View>
           </View>
@@ -180,7 +199,7 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 12,
     fontWeight: 'bold',
-  }, 
+  },
   actionItem: {
     flexDirection: 'row',
     alignItems: 'center',
