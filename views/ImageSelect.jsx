@@ -10,6 +10,7 @@ import {
 } from "firebase/storage";
 import { storage } from "../firebaseConfig";
 import { useNavigation } from "@react-navigation/native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const STORAGE_KEY = "images/";
 
@@ -58,7 +59,7 @@ export default function ImageSelect() {
   }
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <View style={{ flex: 2, width: "100%", alignItems: "center" }}>
         <Text style={styles.buttonText}>Image Preview</Text>
         <Image
@@ -92,7 +93,7 @@ export default function ImageSelect() {
           </TouchableOpacity>
         ) : null}
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 

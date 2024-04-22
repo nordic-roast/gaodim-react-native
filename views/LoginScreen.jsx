@@ -12,6 +12,7 @@ import {
 import { auth } from "../firebaseConfig";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import LoadingModal from "./LoadingModal";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
@@ -33,7 +34,7 @@ const LoginScreen = ({ navigation }) => {
   }
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <LoadingModal isLoading={isLoading}></LoadingModal>
       <TouchableOpacity
         style={styles.backButton}
@@ -83,7 +84,7 @@ const LoginScreen = ({ navigation }) => {
           No account? Register
         </Text>
       </TouchableOpacity>
-    </View>
+    </SafeAreaView>
   );
 };
 
