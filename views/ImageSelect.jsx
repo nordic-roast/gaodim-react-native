@@ -71,7 +71,14 @@ export default function ImageSelect() {
           style={{ width: "100%", height: "100%" }}
         />
       </View>
-      <View style={{ flex: 1, width: "100%", justifyContent: "space-evenly" }}>
+      <View
+        style={{
+          flex: 1,
+          width: "100%",
+          justifyContent: "space-evenly",
+          alignItems: "center",
+        }}
+      >
         <TouchableOpacity
           style={styles.primaryButton}
           onPress={() => pickImage("camera")}
@@ -108,7 +115,7 @@ const styles = StyleSheet.create({
   primaryButton: {
     backgroundColor: "#35C2C1",
     color: "#ffffff",
-    width: "100%",
+    width: "80%",
     padding: 15,
     marginVertical: 5,
     borderRadius: 5,
@@ -117,7 +124,7 @@ const styles = StyleSheet.create({
   secondaryButton: {
     backgroundColor: "#1E232C",
     color: "#ffffff",
-    width: "100%",
+    width: "80%",
     padding: 15,
     marginVertical: 5,
     borderRadius: 5,
