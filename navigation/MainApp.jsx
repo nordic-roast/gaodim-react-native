@@ -8,7 +8,7 @@ import RegistrationScreen from "../views/RegisterScreen";
 import HomeScreen from "../views/HomeScreen";
 import ImageSelect from "../views/ImageSelect";
 import HistoryScreen from "../views/HistoryScreen";
-import AppealScreen from "../views/HistoryScreen";
+import AppealScreen from "../views/AppealScreen";
 import { Ionicons } from "@expo/vector-icons";
 import { auth } from "../firebaseConfig";
 import { onAuthStateChanged } from "firebase/auth";
@@ -79,6 +79,11 @@ const MainApp = () => {
       <Stack.Screen
         name="Login"
         component={LoginScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Appeal"
+        component={AppealScreen}
         options={{ headerShown: false }}
       />
       <Stack.Screen
