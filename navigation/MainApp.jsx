@@ -8,6 +8,7 @@ import RegistrationScreen from "../views/RegisterScreen";
 import HomeScreen from "../views/HomeScreen";
 import ImageSelect from "../views/ImageSelect";
 import HistoryScreen from "../views/HistoryScreen";
+import AppealScreen from "../views/HistoryScreen";
 import { Ionicons } from "@expo/vector-icons";
 import { auth } from "../firebaseConfig";
 import { onAuthStateChanged } from "firebase/auth";
@@ -69,7 +70,7 @@ const BottomTabNavigator = () => {
 
 const MainApp = () => {
   return (
-    <Stack.Navigator initialRouteName="Appeal">
+    <Stack.Navigator initialRouteName="Splash">
       <Stack.Screen
         name="Splash"
         component={SplashScreen}
@@ -83,6 +84,11 @@ const MainApp = () => {
       <Stack.Screen
         name="Register"
         component={RegistrationScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Appeal"
+        component={AppealScreen}
         options={{ headerShown: false }}
       />
       {/* Once logged in, the Main tab navigator is active */}

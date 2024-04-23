@@ -9,7 +9,6 @@ import {
   getDownloadURL,
 } from "firebase/storage";
 import { storage } from "../firebaseConfig";
-import { useNavigation } from "@react-navigation/native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const STORAGE_KEY = "images/";
@@ -32,9 +31,8 @@ async function uploadImage(uri, navigation) {
     });
 }
 
-export default function ImageSelect() {
+export default function ImageSelect({ navigation }) {
   const [selectedImage, setSelectedImage] = useState(null);
-  const navigation = useNavigation();
 
   async function pickImage(mode) {
     let result;
